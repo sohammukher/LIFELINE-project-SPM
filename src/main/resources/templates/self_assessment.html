@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Self Assessment Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link href="css/self_assessment.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <section class="bg-light px-4 py-4">
+    <div id="app" class="container">
+      <div v-if="showCoverPage" class="showcase-container text-center">
+        <h2 class="header-text text-center mb-4">
+          {{headerTitle}}
+        </h2>
+        <p class="description text-secondary text-center ">
+          Regular check-ups can help find potential health issues before they become a problem. When you see your doctor
+          regularly, they are able to detect health conditions or diseases early. Early detection gives you the best
+          chance for getting the right treatment quickly, avoiding any complications. By getting the correct health
+          services, screenings, and treatment you are taking important steps toward living a longer, healthier life.
+        </p>
+        <button type="button" class="btn btn-dark" @click="startAssessment()">
+          {{proceedBtnLabel}}
+        </button>
+      </div>
+      <div v-if="showQuestionSection" class="container p-3">
+        <!--         <span class="answer-count">
+          {{numOfAnsweredQuestions + '/' + qa.length}}
+        </span> -->
+        <!--         {{totalScore}} -->
+        <div class="question-area p-3">
+          <div class="question-container px-2">
+            <h6 class="question-number">
+              Question {{currentIndex + 1}} of {{qa.length}}
+            </h6>
+            <p class="question-statement fs-6 mb-3" v-html="toHtml(currentQuestion.questionLabel)">
+              <!--               {{currentQuestion.question}} -->
+            </p>
+            <div class="options-container my-2">
+              <div class="row">
+                <div v-for="(opt, index) in currentQuestion.options" class="col-12 col-md-6 px-1">
+                  <button
+                    :class="[(opt.optionName === currentQuestion.answer) ? 'selected' : '', 'btn btn-sm w-100 my-1 option-box text-center']"
+                    @click="selectOption(opt.optionName)">
+                    {{opt.optionLabel}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-row justify-content-center align-items-center action-btn-container g-4 text-center">
+            <div class="px-1">
+              <button type="button" class=" btn btn-link btn-sm" @click="goToFirst()" :disabled="currentIndex === 0">
+                First
+              </button>
+            </div>
+            <div class="px-1">
+              <button type="button" class=" btn btn-secondary btn-sm" @click="prev()" :disabled="isPrevDisabled">
+                <i class="d-none d-md-inline-block bi bi-arrow-left me-1 text-white"></i>
+                Previous
+              </button>
+            </div>
+            <div class="px-1">
+              <button type="button" class=" btn btn-sm " @click="finish()" :disabled="!allAnswered"
+                :class="[allAnswered ? 'btn-primary' : 'btn-outline-primary'] ">
+                <!--                 :title="`${qa.length-numOfAnsweredQuestions} out of ${qa.length} questions yet to be answered.`" -->
+                Finish
+              </button>
+              <!--               {{numOfAnsweredQuestions + '/' + qa.length}} -->
+            </div>
+            <div class="px-1">
+              <button type="button" class="btn btn-primary btn-sm text-white" @click="next()"
+                :disabled="isNextDisabled">
+                Next
+                <i class="d-none d-md-inline-block bi bi-arrow-right ms-1 text-white"></i>
+              </button>
+            </div>
+            <div class="px-1">
+              <button type="button" class=" btn btn-link btn-sm" @click="goToLast()"
+                :disabled="currentIndex === (qa.length - 1)">
+                Last
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="showThankYouPage"
+        class="py-3 test-completed-showcase d-flex flex-column justify-content-center align-items-center">
+        <div class="results-header-container p-2 d-flex justify-content-between align-items-center">
+          <img src="/images/self_assessment_screen.jpeg" alt="mental-health-symbol" class="w-25 img-fluid d-none d-md-block"
+            style="width: 30% !important;">
+          <div class="results-text ps-md-4 pt-md-4">
+            <h3 class="results-header m-0 text-center text-md-start">
+              Your Assessment Score: <span :class="totalScoreDisplayClass"> {{totalScore}} </span>
+            </h3>
+            <h4 class="depression-level-text text-center text-md-start" :class="depressionLevelTextColor">
+              {{depressionStatus.label + ' Depression'}}
+            </h4>
+            <p class="results-msg text-secondary text-center text-md-start">
+              Here is the score of your self assessment test. If your score is in the range of 0-4
+              then don't worry, nothing wrong with your mental health! You are as fresh as you have always been!
+              However, if it is beyond that it is advisable for you to consult a doctor.
+            </p>
+          </div>
+        </div>
+        <!--         <h2 class="thank-you-header">
+          Thank you!
+        </h2>
+        <p class="thank-you-msg text-secondary text-center">
+          Thanks for your response! We'll analysis this and will get back to you soon.
+          <br />
+          Afterall, Health is Wealth!!
+        </p>
+        <h6 class="mb-3">
+          Take Care!
+        </h6> -->
+        <div class="user-action-post-results w-100">
+          <div class="row">
+            <div class="col-12 col-sm-4 px-2 my-2">
+              <button type="button" class="w-100 btn btn-sm btn-outline-danger" @click="cancelAssessment()">
+                Cancel Assessment
+              </button>
+            </div>
+            <div class="col-12 col-sm-4 px-2 my-2">
+              <a type="button" class="w-100 btn btn-sm btn-dark" th:href="@{/self_assessment(id=${pid})}">
+                Start Again
+                <i class="bi bi-arrow-clockwise text-white"></i>
+              </a>
+            </div>
+            <div class="col-12 col-sm-4 px-2 my-2">
+              <button role="button" class="w-100 btn btn-sm btn-outline-primary" @click="saveResult()">
+                Save Result
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="js/self_assessment.js"></script>
+<</body>
+</html>
+<!--                 <input type="radio" :id="`qId${currentQuestion.index}${opt.optionName}`"
+                    :name="`qId${currentQuestion.index}_${opt.optionName}`" :value="`${opt.optionName}`"
+                    v-model="currentQuestion.defaultAnswer" @click="alert('clicked')">
+                  <label :for="`qId${currentQuestion.index}${opt.optionName}`">{{opt.optionLabel}}</label> -->

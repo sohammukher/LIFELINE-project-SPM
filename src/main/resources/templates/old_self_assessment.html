@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Self Assessment Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link href="css/self_assessment.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <section class="bg-light px-4 py-4">
+
+    <div id="app" class="container">
+      <div v-if="!proceeded" class="showcase-container text-center">
+
+        <h2 class="header-text text-center mb-4">
+          {{headerTitle}}
+        </h2>
+        <p class="description text-secondary text-center ">
+
+          Regular check-ups can help find potential health issues before they become a problem. When you see your doctor
+          regularly, they are able to detect health conditions or diseases early. Early detection gives you the best
+          chance for getting the right treatment quickly, avoiding any complications. By getting the correct health
+          services, screenings, and treatment you are taking important steps toward living a longer, healthier life.
+
+
+        </p>
+        <button type="button" class="btn btn-dark" @click="startAssessment()">
+          {{proceedBtnLabel}}
+        </button>
+      </div>
+
+
+      <div v-if="proceeded" class="container p-3">
+        <!--         <span class="answer-count">
+          {{numOfAnsweredQuestions + '/' + qa.length}}
+        </span> -->
+        <div class="question-area p-3">
+          <div class="question-container py-1">
+            <p class="question-statement fs-4 mb-3">
+              {{currentQuestion.question}}
+            </p>
+            <div class="options-container my-2">
+              <div v-for="(opt, index) in currentQuestion.options">
+                <button
+                  :class="[(opt.optionName === currentQuestion.answer) ? 'selected' : '', 'btn w-100 my-1 option-box ']"
+                  @click="selectOption(opt.optionName)">
+                  {{opt.optionLabel}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row action-btn-container g-4">
+            <div class="col-6 px-1 ">
+              <button type="button" class="w-100 btn btn-secondary" @click="prev()" :disabled="isPrevDisabled">
+                <i class="bi bi-arrow-left me-1 text-white"></i>
+                Previous
+              </button>
+            </div>
+            <div class="col-6 px-1">
+              <button type="button" class="w-100 btn btn-primary text-white" @click="next()" :disabled="isNextDisabled">
+                Next
+                <i class="bi bi-arrow-right ms-1 text-white"></i>
+              </button>
+            </div>
+            <div class="col-12 px-1">
+              <button type="button" class="w-100 btn " @click="finish()" :disabled="!isNextDisabled"
+                :class="[(numOfAnsweredQuestions === qa.length) ? 'btn-primary' : 'btn-outline-primary'] ">
+                Finish {{numOfAnsweredQuestions + '/' + qa.length}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <script src="js/self_assessment.js"></script>
+</body>
+
+</html>
+
+
+<!--                 <input type="radio" :id="`qId${currentQuestion.index}${opt.optionName}`"
+                    :name="`qId${currentQuestion.index}_${opt.optionName}`" :value="`${opt.optionName}`"
+                    v-model="currentQuestion.defaultAnswer" @click="alert('clicked')">
+                  <label :for="`qId${currentQuestion.index}${opt.optionName}`">{{opt.optionLabel}}</label> -->

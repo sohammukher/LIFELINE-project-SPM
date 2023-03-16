@@ -1,0 +1,213 @@
+:root {
+    --input-font-size: 13px;
+  }
+
+  /* START : NAV CSS */
+  body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.header-icon{
+    height: 90px;
+    width: 110px;
+}
+.nav{
+    padding: 20px;
+    font-size: 20px;
+}
+.dropdown-menu li{
+    padding: 10px;
+    font-size: 20px;
+}
+.d-flex{
+    background-image: url('https://mindyourmind.ca/sites/default/files/assets/images/post/2022/05/Mental-Health-Week-2022-1480.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 500px;
+}
+.d-flex .main-heading{
+    font-size: 80px;
+    text-align: center;
+    padding: 220px 0px 220px 0px;
+    color: white;
+}
+.full-text-container{
+    text-align: center;
+    padding: 30px 120px;
+}
+.paragraph-text{
+    font-size: 20px;
+}
+.image-with-description{
+    display: flex;
+}
+.image-with-description img{
+    height: 200px;
+    width: 350px;
+    margin: 30px 60px 30px 80px;
+}
+.image-with-description_description{
+    margin: 70px 0 70px 0;
+}
+/* button{
+    background-color: #F0A04B;
+    border: none;
+    padding: 10px 60px;
+    font-size: 20px;
+    color: white;
+} */
+footer, footer a{
+    color: white;
+    font-size: 20px;
+    padding: 10px 40px 10px 40px;
+}
+/* footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+} */
+  /* END : NAV CSS */
+body *{
+    box-sizing: border-box;
+    font-family: Montserrat,sans-serif;
+}
+main{
+    min-height: 70vh;
+}
+.register-container{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:20px;
+    margin-bottom: 20px;
+    max-width: 400px;
+    padding:20px;
+}
+.register-container .register-title{
+    text-align: center;
+    margin-bottom: 50px;
+}
+.display-none{
+    display: none!important;
+}
+.field-raw{
+    margin-bottom: 15px!important;
+    margin-top: 15px!important;
+}
+.register-container label{
+    margin-left: 0;
+    margin-bottom: 10px;
+    font-size:  var(--input-font-size);
+    font-weight: bold;
+    display: block;
+}
+.register-form input,
+.register-container [name="userType"]{
+    padding: 11px 15px;
+    display: block;
+    max-width: 100%;
+    width: 100%;
+    font-size: var(--input-font-size);
+    border: 1px solid #e4e4e4;
+    border-radius: 0;
+    color: #000000;
+    line-height: 1.6;
+    transition: border-color .1s cubic-bezier(.25,.46,.45,.94);
+} 
+.register-container .alert-message{
+    display: none;
+}
+.register-container .aleart .alert-message{
+    color: #d20000;
+    display: block;
+    margin-top:5px;
+}
+.register-container .aleart .alert-message-border{
+    border-color: #d20000;
+}
+.register-container [type="submit"],
+.register-button{
+    color: #ffffff;
+    background: #0c649f!important;
+    max-width: 100px;
+    padding: 10px 15px;
+    border: 1px solid #0c649f;
+    font-size: 13px;
+}
+.register-form input:focus, 
+.register-container [name="userType"]:focus{
+    outline: none;
+    border-color: #6f6f6f;
+}
+
+/* CSS styles */
+.skeleton {
+    background-color: #f2f2f2;
+    background-image: linear-gradient(90deg, #f2f2f2, #e6e6e6, #f2f2f2);
+    animation: loading 1s ease-in-out infinite;
+  }
+
+  @keyframes loading {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
+
+  .skeleton-container{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:20px;
+    margin-bottom: 20px;
+    max-width: 400px;
+}
+  .skeleton-container .skeleton{
+    height: 40px;
+    width: 100%;
+    margin: 40px 0;
+  }
+  .skeleton-container .skeleton-btn{
+    height: 40px;
+    width: 100%;
+    max-width: 100px;
+    margin:10px 0;
+  }
+  .success-message{
+    margin: 13px 0px;
+    padding: 15px;
+    background: #d4edda;
+    color: #000000;
+    text-align: center;
+  }
+  
+  
+ #confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f00;
+  border-radius: 50%;
+  animation: confetti 1s ease-out forwards;
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(1000px);
+    opacity: 0;
+  }
+}

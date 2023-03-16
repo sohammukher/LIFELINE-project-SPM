@@ -1,0 +1,142 @@
+
+:root {
+    --input-font-size: 13px;
+  }
+
+  /* START : NAV CSS */
+  body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.header-icon{
+    height: 90px;
+    width: 110px;
+}
+.nav{
+    padding: 20px;
+    font-size: 20px;
+}
+.dropdown-menu li{
+    padding: 10px;
+    font-size: 20px;
+}
+.d-flex{
+    background-image: url('https://mindyourmind.ca/sites/default/files/assets/images/post/2022/05/Mental-Health-Week-2022-1480.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 500px;
+}
+.d-flex .main-heading{
+    font-size: 80px;
+    text-align: center;
+    padding: 220px 0px 220px 0px;
+    color: white;
+}
+.full-text-container{
+    text-align: center;
+    padding: 30px 120px;
+}
+.paragraph-text{
+    font-size: 20px;
+}
+.image-with-description{
+    display: flex;
+}
+.image-with-description img{
+    height: 200px;
+    width: 350px;
+    margin: 30px 60px 30px 80px;
+}
+.image-with-description_description{
+    margin: 70px 0 70px 0;
+}
+/* button{
+    background-color: #F0A04B;
+    border: none;
+    padding: 10px 60px;
+    font-size: 20px;
+    color: white;
+} */
+footer, footer a{
+    color: white;
+    font-size: 20px;
+    padding: 10px 40px 10px 40px;
+}
+/* footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+} */
+  /* END : NAV CSS */
+
+/* Login Form CSS */
+body *{
+    box-sizing: border-box;
+    font-family: Montserrat,sans-serif;
+}
+main{
+    min-height: 70vh;
+}
+  .success-message{
+    margin: 13px 0px;
+    padding: 15px;
+    background: #d4edda;
+    color: #000000;
+    text-align: center;
+  }
+ 
+  .login-form input {
+    padding: 11px 15px;
+    display: block;
+    max-width: 100%;
+    width: 100%;
+    font-size: var(--input-font-size);
+    border: 1px solid #e4e4e4;
+    border-radius: 0;
+    color: #000000;
+    line-height: 1.6;
+    transition: border-color .1s cubic-bezier(.25,.46,.45,.94);
+}
+.login-container{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:20px;
+    margin-bottom: 20px;
+    max-width: 400px;
+    padding:20px;
+    
+}
+.login-container .login-title{
+    text-align: center;
+    margin-bottom: 50px;
+}
+.field-raw{
+    margin-bottom: 15px!important;
+    margin-top: 15px!important;
+}
+.login-container label{
+    margin-left: 0;
+    margin-bottom: 10px;
+    font-size:  var(--input-font-size);
+    font-weight: bold;
+    display: block;
+}
+.login-form input:focus, 
+.login-form [name="userType"]:focus{
+    outline: none;
+    border-color: #6f6f6f;
+}
+.login-button{
+    color: #ffffff!important;
+    background: #0c649f!important;
+    max-width: 100px!important;;
+    padding: 10px 15px!important;;
+    border: 1px solid #0c649f!important;;
+    font-size: 13px!important;;
+}
+.text-label{
+    font-weight: bold;
+}
+.register-redirect-container{
+    margin-top:15px;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Lifeline - My Profile</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/profile.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="/index"><img class="header-icon"  src="images/LIFELINE.png"></a>
+    </div>
+    
+    
+  </div>
+</nav>
+  
+<div >
+    <h1 class="main-heading">MY PROFILE</h1>
+</div>
+<form id="profilePatient"  th:if='${type.equals("P")}' action="updatePatient">
+<div class="text-with-fields">
+    <p>First Name:</p>
+    <input type="text" class="text-with-fields_field" name="firstName" id="fname" th:value="${patient.fname}" disabled><br>
+    <p>Last Name:</p>
+    <input type="text" class="text-with-fields_field"  name="lastName" id="lname" th:value="${patient.lname}" disabled><br>
+    <p>Address:</p>
+    <input type="text" class="editable_field" id="address" name="address1" th:value="${patient.addr}" disabled><br>
+    <p>Phone Number:</p>
+    <input type="text" class="editable_field" id="contact" name="mobileNumber" th:value="${patient.mobile}" disabled><br>
+    <p>Email ID:</p>
+    <input type="text" class="text-with-fields_field" name = "email" id="email" th:value="${patient.email}" disabled><br>
+    <p>Date of Birth</p>
+    <input type="date" class="text-with-fields_field"  name="birthday" id="dob" th:value="${patient.birthday}" disabled><br>
+ 
+    <p>Symptoms:</p>
+    <textarea class="editable_field" id="symptoms" name="chars" th:value="${patient.chars}" disabled></textarea><br>
+    <p>Medical History:</p>
+    <textarea class="editable_field" id="history" name="history" th:value="${patient.history}" disabled></textarea><br>
+  </div>
+  </form>
+  
+  
+ <form id="counsellorProfile"  th:if='${type.equals("C")}' action="updateCounsellor">
+<div class="text-with-fields">
+    <p>First Name:</p>
+    <input type="text" class="text-with-fields_field" name="firstName" id="fname" th:value="${counsellor.fname}" disabled><br>
+    <p>Last Name:</p>
+    <input type="text" class="text-with-fields_field"  name="lastName" id="lname" th:value="${counsellor.lname}" disabled><br>
+    <p>Address:</p>
+    <input type="text" class="editable_field" id="address" name="address1" th:value="${counsellor.addr}" disabled><br>
+    <p>Phone Number:</p>
+    <input type="text" class="editable_field" id="contact" name="mobileNumber" th:value="${counsellor.mobile}" disabled><br>
+    <p>Email ID:</p>
+    <input type="text" class="text-with-fields_field" name = "email" id="email" th:value="${counsellor.email}" disabled><br>
+    <p>Date of Birth</p>
+    <input type="date" class="text-with-fields_field"  name="birthday" id="dob" th:value="${counsellor.birthday}" disabled><br>
+ 
+    <p>ID:</p>
+    <input type="text" class="text-with-fields_field" name = "cid" id="cid" th:value="${counsellor.cid}" disabled><br>
+    </div>
+  </form> 
+  
+  
+  <form id="doctorProfile"  th:if='${type.equals("D")}' action="updateDoctor">
+<div class="text-with-fields">
+    <p>First Name:</p>
+    <input type="text" class="text-with-fields_field" name="firstName" id="fname" th:value="${doctor.fname}" disabled><br>
+    <p>Last Name:</p>
+    <input type="text" class="text-with-fields_field"  name="lastName" id="lname" th:value="${doctor.lname}" disabled><br>
+    <p>Address:</p>
+    <input type="text" class="editable_field" id="address" name="address1" th:value="${doctor.addr}" disabled><br>
+    <p>Phone Number:</p>
+    <input type="text" class="editable_field" id="contact" name="mobileNumber" th:value="${doctor.mobile}" disabled><br>
+    <p>Email ID:</p>
+    <input type="text" class="text-with-fields_field" name = "email" id="email" th:value="${doctor.email}" disabled><br>
+    <p>Date of Birth</p>
+    <input type="date" class="text-with-fields_field"  name="birthday" id="dob" th:value="${doctor.birthday}" disabled><br>
+ 
+    <p>ID:</p>
+    <input type="text" class="text-with-fields_field" name = "did" id="did" th:value="${doctor.did}" disabled><br>
+    </div>
+  </form> 
+</div>
+
+<div class="button-container">
+    <button id="edit" onclick="removeDisabled()">Edit Profile</button>
+    <button id="save" >Save Profile</button>
+</div>
+
+<footer class="text-center text-white fixed-bottom" style="background-color: #21081a;">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        <p class="paragraph-text">Contact Us:</p>
+        <a href="#">Github</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+        <p class="paragraph-text" style="padding-top: 10px; font-size: 10px;">© 2023 Copyright</p>
+    </div>
+</footer>
+
+<script>
+    function removeDisabled(){
+        var inputs = document.getElementsByClassName('editable_field');
+        for(var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>

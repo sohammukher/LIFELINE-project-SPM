@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Lifeline</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+     <a href="/index"><img class="header-icon" src="/images/LIFELINE.png"></a>
+    </div>
+    
+    <ul class="nav navbar-nav navbar-right">
+        <li >
+            <a th:href="@{/profile(id=${pid},type=P)}">My Profile</a> 
+        </li>
+    </ul>
+  </div>
+</nav>
+  
+
+
+<div class="image-with-description">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmwPPqClgw_ARANYHyK6upw_v2fRhzLWjaZdEqKaESLMLVoC8hzNCS0vIJT6rkQTFBQkU&usqp=CAU">
+    <div class="image-with-description_description">
+        <h3><a th:href="@{/self_assessment(id=${pid})}">SELF ASSESSMENT</a></h3>
+        <p class="paragraph-text">Take our self assessment test to understand your current mental health status.</p>
+    </div>
+</div>
+<div class="image-with-description">
+    <img src="https://cdn.pixabay.com/photo/2022/07/15/18/27/mental-health-7323725_960_720.png">
+    <div class="image-with-description_description">
+        <h3><a href="#">CONSULT A COUNSELLOR</a></h3>
+        <p class="paragraph-text">Our counsellors will get in touch with you after analysing your self assessment test.</p>
+    </div>
+</div>
+<div class="image-with-description">
+    <img src="https://static.businessworld.in/article/article_extra_large_image/1623935257_LpRo34_thumbnail_Article_Image.jpg">
+    <div class="image-with-description_description">
+        <h3><a href="#">APPOINTMENTS</a></h3>
+        <p class="paragraph-text">Get professional help from expert doctors to start your treatment towards better health.</p>
+    </div>
+</div>
+<div class="image-with-description">
+    <img src="https://t3.ftcdn.net/jpg/05/10/42/34/360_F_510423418_j2mWEVlnminsetmNClmvVT6GnrpH1cyy.jpg">
+    <div class="image-with-description_description">
+        <h3><a href="#">TRACK YOUR IMPROVEMENT</a></h3>
+        <p class="paragraph-text">View your history of self assessment results to track your mental health betterment.</p>
+    </div>
+</div>
+
+
+<footer class="text-center text-white fixed-bottom" style="background-color: #21081a;">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        <p class="paragraph-text">Contact Us:</p>
+        <a href="#">Github</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+        <p class="paragraph-text" style="padding-top: 10px; font-size: 10px;">© 2023 Copyright</p>
+    </div>
+</footer>
+
+</body>
+</html>

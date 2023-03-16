@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="js/register.js"></script>
+    <link rel="stylesheet" href="css/register.css">
+    <title>Signup</title>
+</head>
+<body>
+
+    <!-- Start Nav -->
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a href="/index"><img class="header-icon"  src="images/LIFELINE.png"></a>
+          </div>
+         
+         
+        </div>
+      </nav>
+    <!-- End Nav -->
+    <div id="confetti"></div>
+    <!-- Start Main Container -->
+    <main>
+        <div class="register-container">
+            <h1 class="register-title">Create Account</h1>
+        <label for="userType">I am a:</label>
+        <select name="userType" id="userType">
+            <option value="none">Who are you ?</option>
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+            <option value="counsellor">Counsellor</option>
+        </select>
+    
+        <!-- skeleton to display loader -->
+        <div class="skeleton-container display-none">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton skeleton-btn"></div>
+        </div>
+    <!-- Register form for a doctor -->
+    
+     <!-- Register form for a patient -->
+     <form id="patientRegisterForm" action="addPatient" class="display-none register-form">
+        <div class="success-message display-none">You are registered successfully.</div>
+        <div class="field-raw">
+            <label for="firstName">First name:</label>
+            <input type="text"  name="firstName" class="firstName" value="">
+            <small class="alert-message">*First Name is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="lastName">Last name:</label>
+            <input type="text"  name="lastName" class="lastName" value="">
+            <small class="alert-message">*Last Name is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="email">Email:</label>
+            <input type="email" name = "email" class="email">
+            <small class="alert-message">*Email is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="birthday">Birthday:</label>
+            <input type="date" name="birthday" class="birthday">
+            <small class="alert-message">*Birthday is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="address1">Address Line 1:</label>
+            <input type="text" name="address1" class="address1">
+            <small class="alert-message">*Address Line 1 is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="address2">Address Line 2:</label>
+            <input type="text" name="address2" class="address2">
+            <small class="alert-message">*Address Line 2 is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="text" name="mobileNumber" class="mobileNumber" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+            <small class="alert-message">*Mobile Number is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="pass">Password (8 characters minimum required ):</label>
+            <input type="password"  name="password" class="password">
+            <small class="alert-message">*Password is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="confirmPassword">Confirm Password </label>
+            <input type="password"  name="confirmPassword" class="confirmPassword">
+            <small class="alert-message">*Password and Confirm Password are not same</small>
+        </div>
+        <button class="register-button">Submit</button>
+      </form> 
+    
+    <form id="doctorRegisterForm" action="addDoctor" class="display-none register-form">
+        <div class="success-message display-none">You are registered successfully.</div>
+        <div class="field-raw">
+            <label for="firstName">First name:</label>
+            <input type="text" name="firstName" class="firstName" value="">
+            <small class="alert-message">*First Name is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="lastName">Last name:</label>
+            <input type="text"  name="lastName" class="lastName" value="">
+            <small class="alert-message">*Last Name is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="email">Email:</label>
+            <input type="email" name="email" class="email">
+            <small class="alert-message">*Email is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="birthday">Birthday:</label>
+            <input type="date" name="birthday" class="birthday">
+            <small class="alert-message">*Birthday is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="address1">Address Line 1:</label>
+            <input type="text" name="address1" class="address1">
+            <small class="alert-message">*Address Line 1 is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="address2">Address Line 2:</label>
+            <input type="text" name="address2" class="address2">
+            <small class="alert-message">*Address Line 2 is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="text" name="mobileNumber" class="mobileNumber" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+            <small class="alert-message">*Mobile Number is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="registrationNumber">Registration Number:</label>
+            <input type="text" name="registrationNumber" class="registrationNumber" value="">
+            <small class="alert-message">*Registration Number is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="pass">Password (8 characters minimum required ):</label>
+            <input type="password"  name="password" class="password">
+            <small class="alert-message">*Password is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="confirmPassword">Confirm Password </label>
+            <input type="password"  name="confirmPassword" class="confirmPassword">
+            <small class="alert-message">*Password and Confirm Password are not same</small>
+        </div>
+        <button class="register-button">Submit</button>
+        <input type="submit" class="display-none" value="Submit">
+      </form> 
+    
+      
+    
+      <!-- Register form for a counsellor -->
+      <form id="counsellorRegisterForm" action="addCounsellor" class="display-none register-form">
+        <div class="success-message display-none">You are registered successfully.</div>
+        <div class="field-raw">
+            <label for="firstName">First name:</label>
+            <input type="text"  name="firstName" class="firstName" value="">
+            <small class="alert-message">*First Name is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="lastName">Last name:</label>
+            <input type="text"  name="lastName" class="lastName" value="">
+            <small class="alert-message">*Last Name is required</small>
+        </div>
+    
+        <div class="field-raw">
+            <label for="email">Email:</label>
+            <input type="email" name = "email" class="email">
+            <small class="alert-message">*Email is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="birthday">Birthday:</label>
+            <input type="date" name="birthday" class="birthday">
+            <small class="alert-message">*Birthday is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="address1">Address Line 1:</label>
+            <input type="text" name="address1" class="address1">
+            <small class="alert-message">*Address Line 1 is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="address2">Address Line 2:</label>
+            <input type="text" name="address2" class="address2">
+            <small class="alert-message">*Address Line 2 is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="text" name="mobileNumber" class="mobileNumber" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+            <small class="alert-message">*Mobile Number is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="registrationNumber">Registration Number:</label>
+            <input type="text" name="registrationNumber" class="registrationNumber" value="">
+            <small class="alert-message">*Registration Number is required</small>
+        </div>
+        <div class="field-raw">
+            <label for="pass">Password (8 characters minimum required ):</label>
+            <input type="password"  name="password" class="password">
+            <small class="alert-message">*Password required</small>
+        </div>
+        <div class="field-raw">
+            <label for="confirmPassword">Confirm Password </label>
+            <input type="password"  name="confirmPassword" class="confirmPassword">
+            <small class="alert-message">*Password and Confirm Password are not same</small>
+        </div>
+        <button class="register-button">Submit</button>
+        <input type="submit" class="display-none" value="Submit">
+        
+      </form> 
+      
+      
+
+
+    </div>
+    </main>
+    <!-- END Start Main Container -->
+<!-- Footer Start -->
+<footer class="text-center text-white fixed-bottom" style="background-color: #21081a;">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        <p class="paragraph-text">Contact Us:</p>
+        <a href="#">Github</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+        <p class="paragraph-text" style="padding-top: 10px; font-size: 10px;">© 2023 Copyright</p>
+    </div>
+</footer>
+<!-- Footer End -->
+</body>
+</html>

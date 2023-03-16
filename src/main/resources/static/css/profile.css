@@ -1,0 +1,50 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.header-icon{
+    height: 90px;
+    width: 110px;
+}
+.nav{
+    padding: 20px;
+    font-size: 20px;
+}
+.main-heading{
+    text-align: center;
+}
+.text-with-fields{
+    margin: 50px 400px 50px 400px;
+}
+.text-with-fields p{
+    font-size: 20px;
+}
+.text-with-fields input{
+    margin-bottom: 30px;
+    width: 700px;
+    padding: 10px;
+}
+
+.editable_field p{
+    font-size: 20px;
+}
+.editable_field input{
+    
+    width: 700px;
+    padding: 10px;
+}
+.button-container{
+    margin: 20px 500px;
+}
+button{
+    background-color: #F0A04B;
+    border: none;
+    padding: 10px 60px;
+    font-size: 20px;
+    color: white;
+    margin: 10px;
+}
+footer, footer a{
+    color: white;
+    font-size: 20px;
+    padding: 10px 40px 10px 40px;
+}

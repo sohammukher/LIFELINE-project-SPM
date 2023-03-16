@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/counsellor.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="/js/counsellor.js"></script>
+    <link rel="stylesheet" href="counsellor.css">
+    <title>LifeLine</title>
+    
+</head>
+<body>
+    <!-- Header Section-->
+    <nav class="navbar navbar-inverse sticky-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a href="/index"><img class="header-icon"  src="/images/LIFELINE.png"></a>
+          </div>
+         
+          <p class="text-right"><a th:href="@{/profile(id=${cid},type=D)}">My Profile</a> </p>
+        </div>
+    </nav>
+     
+     <!-- Welcome Section -->
+    <main>
+    <div class ="counsellor-container container">
+            <h1 class="counsellor-title">Hello Doctor</h1>
+            <div class="operation-buttons mt-10">
+                <button class="view-patient main-btn">List of Patients</button>
+                <!-- <button class="view-appointments main-btn">Assigning a Doctor</button> -->
+                <button class="assign-doctors main-btn">Appointment with Patient</button>
+            </div>  
+
+            <!--Display Section-->
+        <div class="loader-container display-none mt-1">
+            <div class="loader"></div>
+            <div class="loader"></div>
+            <div class="loader"></div>
+            <div class="loader"></div>
+            <div class="loader"></div>
+        </div>
+        <!-- Patient List -->
+        <div class="patient-list-table list-table mt-1 display-none">
+            <table class="table table-striped ">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Test Result</th>
+                    <th scope="col">Appointment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td class="pat-name">Robert Cruz </td>
+                    <td class="pat-email">robertcruz@gmail.com</td>
+                    <td class="pat-assessment">75%</td>
+                    <td class="pat-accept-reject">
+                        <button type="button" class="btn btn-success">Modify</button>
+                        <button type="button" class="btn btn-danger">Refuse</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td class="pat-name">Glenda Collazo</td>
+                    <td class="pat-email">collazoglenda@dayrep.com</td>
+                    <td class="pat-assessment">67%</td>
+                    <td class="pat-accept-reject">
+                        <button type="button" class="btn btn-success">Modify</button>
+                        <button type="button" class="btn btn-danger">Refuse</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td class="pat-name">Kimberly Lewis</td>
+                    <td class="pat-email">kimberlylewis@rhyta.com</td>
+                    <td class="pat-assessment">45%</td>
+                    <td class="pat-accept-reject">
+                        <button type="button" class="btn btn-success">Modify</button>
+                        <button type="button" class="btn btn-danger">Refuse</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+         <!-- Appointment with Patient -->
+        <div class="appointment-list-table list-table mt-1 display-none">
+            <table class="table table-striped ">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Schedule</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td class="pat-name">Summer Barrow</td>
+                    <td class="pat-email">summerbarrow@armyspy.com</td>
+                    <td class="pat-score">70%</td>
+                    <td class="pat-schedule">2023-04-02; 03:40pm</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td class="pat-name">Aimee Mitchell</td>
+                    <td class="pat-email">aimeemitchell@teleworm.us</td>
+                    <td class="pat-score">80%</td>
+                    <td class="pat-schedule">2023-05-12; 11:20pm</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td class="pat-name">Nadal Raya</td>
+                    <td class="pat-email">nadalhernadezraya@jourrapide.com</td>
+                    <td class="pat-score">75%</td>
+                    <td class="pat-schedule">2023-03-22; 10:30pm</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+         
+        
+    </main>
+       
+
+    <!-- Footer Section-->
+    <footer class="text-center text-white fixed-bottom" style="background-color: #21081a;">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            <p class="paragraph-text">Contact Us:</p>
+            <a href="#">Github</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Email</a>
+            <p class="paragraph-text" style="padding-top: 10px; font-size: 10px;">© 2023 Copyright</p>
+        </div>
+    </footer>
+
+</body>
+</html>

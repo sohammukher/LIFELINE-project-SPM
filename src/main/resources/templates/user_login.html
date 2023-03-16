@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/user_login.css">
+    <title>Login</title>
+</head>
+<body>
+
+    <!-- Start Nav -->
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a href="/index"><img class="header-icon"  src="images/LIFELINE.png"></a>
+          </div>
+          
+          
+        </div>
+      </nav>
+    <!-- End Nav -->
+    <!-- Start Main Container -->
+    <main>
+        <div class="login-container">
+            <h1 class="login-title">Login</h1>
+            
+        <form id="loginForm" action = "validateUser" class="login-form">  
+            <div class="field-raw">
+                <label for="userid">Email</label>
+                <input type="text"  name="userid" class="userid" value="">
+                <!-- <small class="alert-message">*First Name is required</small> -->
+            </div>
+        
+            <div class="field-raw">
+                <label for="pwd">Password</label>
+                <input type="password"  name="pwd" class="password" id="yourPassword" value="">
+                <!-- <small class="alert-message">*Last Name is required</small> -->
+            </div>         
+            <input type="submit" class="login-button" value="Login">
+          </form> 
+           <div class="register-redirect-container">
+            <span class="text-label"></span>Don't have account? </span>
+           <a href="register">Create an account</a>
+           </div>
+           
+        </div>     
+    </main>
+    <!-- END Start Main Container -->
+<!-- Footer Start -->
+<footer class="text-center text-white fixed-bottom" style="background-color: #21081a;">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        <p class="paragraph-text">Contact Us:</p>
+        <a href="#">Github</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+        <p class="paragraph-text" style="padding-top: 10px; font-size: 10px;">© 2023 Copyright</p>
+    </div>
+</footer>
+<!-- Footer End -->
+</body>
+</html>
