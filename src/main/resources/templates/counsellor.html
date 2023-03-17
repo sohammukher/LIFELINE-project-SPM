@@ -5,11 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/counsellor.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="/js/counsellor.js"></script>
-    <link rel="stylesheet" href="counsellor.css">
+    <link rel="stylesheet" href="/css/counsellor.css">
     <title>LifeLine</title>
     
 </head>
@@ -31,6 +30,7 @@
             <h1 class="counsellor-title">Hello Counsellor</h1>
             <div class="operation-buttons mt-10">
                 <button class="view-patient main-btn">List of Patients</button>
+                
                 <!-- <button class="view-appointments main-btn">Assigning a Doctor</button> -->
                 <button class="assign-doctors main-btn">Appointment with Patient</button>
             </div>  
@@ -39,6 +39,7 @@
         <div class="loader-container display-none mt-1">
             <div class="loader"></div>
             <div class="loader"></div>
+
             <div class="loader"></div>
             <div class="loader"></div>
             <div class="loader"></div>
@@ -55,37 +56,8 @@
                     <th scope="col">Appointment</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td class="pat-name">Robert Cruz </td>
-                    <td class="pat-email">robertcruz@gmail.com</td>
-                    <td class="pat-assessment">75%</td>
-                    <td class="pat-accept-reject">
-                        <button type="button" class="btn btn-success">Schedule</button>
-                        <button type="button" class="btn btn-danger">Refuse</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td class="pat-name">Glenda Collazo</td>
-                    <td class="pat-email">collazoglenda@dayrep.com</td>
-                    <td class="pat-assessment">67%</td>
-                    <td class="pat-accept-reject">
-                        <button type="button" class="btn btn-success">Schedule</button>
-                        <button type="button" class="btn btn-danger">Refuse</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td class="pat-name">Kimberly Lewis</td>
-                    <td class="pat-email">kimberlylewis@rhyta.com</td>
-                    <td class="pat-assessment">45%</td>
-                    <td class="pat-accept-reject">
-                        <button type="button" class="btn btn-success">Schedule</button>
-                        <button type="button" class="btn btn-danger">Refuse</button>
-                    </td>
-                  </tr>
+                <tbody id="patient-self-assessment-results">
+                  
                 </tbody>
               </table>
         </div>
