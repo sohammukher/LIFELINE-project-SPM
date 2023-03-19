@@ -1,5 +1,10 @@
 package com.lifeline.lifeline2.models;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Column;
@@ -51,7 +56,47 @@ public class AssessmentDetails {
 	
 	@Column(name="question9")
 	String ans9;
+	
+	@Column(name = "self_assessment_score")
+	int score;
 
+	@Column(name = "date_taken")
+	LocalDate date;
+	
+	@Column(name = "time_taken") 
+	LocalDateTime  time;
+	
+	@Column(name = "appointment_status")
+	String status;
+	
+	public LocalDate getDate() {
+		return date;
+	}
+	public void setDate(LocalDate localDate) {
+		this.date = localDate;
+	}
+	public LocalDateTime getTime() {
+		return time;
+	}
+	public void setTime(LocalDateTime localDateTime) {
+		this.time = localDateTime;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public String toString() {
+		return sid+" ~ "+email+" ~ "+ans1+" ~ "+ans2+" ~ "+ans3+" ~ "+ans4+" ~ "+ans5+" ~ "+ans6
+				+" ~ "+ans7+" ~ "+ans8+" ~ "+ans9+" ~ "+score;
+	}
 	public int getSid() {
 		return sid;
 	}
