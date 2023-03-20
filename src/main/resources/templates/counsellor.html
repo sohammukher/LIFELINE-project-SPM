@@ -30,10 +30,11 @@
             <h1 class="counsellor-title">Hello Counsellor</h1>
             <div class="operation-buttons mt-10">
                 <button class="view-patient main-btn">List of Patients</button>
-                
-                <!-- <button class="view-appointments main-btn">Assigning a Doctor</button> -->
                 <button class="assign-doctors main-btn">Appointment with Patient</button>
             </div>  
+
+            <div id="myModal" class="modal fade" role="dialog">
+            </div>
 
             <!--Display Section-->
         <div class="loader-container display-none mt-1">
@@ -53,11 +54,46 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Test Result</th>
-                    <th scope="col">Appointment</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="patient-self-assessment-results">
-                  
+                  <tr>
+                    <th scope="row">1</th>
+                    <td class="pat-name">A B</td>
+                    <td class="pat-email">a@a.com</td>
+                    <td class="pat-assessment">8</td>
+                    <td class="pat-accept-reject">
+                        <button type="button" class="btn btn-success" id="A-B-a@b.com" data-toggle="modal" data-target="#myModal">Schedule</button>
+                        <button type="button" class="btn btn-danger" id="A_B_a@a.com" data-toggle="modal" data-target="#myModal">Refuse</button>
+                        <button type="button" class="btn btn-info" id="ABCDEABCD" data-toggle="modal" data-target="#myModal">Detailed Score</button>
+                        <button type="button" class="btn btn-warning" id="A__B__a@a.com" data-toggle="modal" data-target="#myModal">Assign</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td class="pat-name">C D</td>
+                    <td class="pat-email">c@d.com</td>
+                    <td class="pat-assessment">6</td>
+                    <td class="pat-accept-reject">
+                        <button type="button" class="btn btn-success" id="C-D-c@d.com" data-toggle="modal" data-target="#myModal">Schedule</button>
+                        <button type="button" class="btn btn-danger" id="C_D_c@d.com" data-toggle="modal" data-target="#myModal">Refuse</button>
+                        <button type="button" class="btn btn-info" id="BCDEABCDB" data-toggle="modal" data-target="#myModal">Detailed Score</button>
+                        <button type="button" class="btn btn-warning" id="C__D__c@d.com" data-toggle="modal" data-target="#myModal">Assign</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td class="pat-name">Y Z</td>
+                    <td class="pat-email">y@z.com</td>
+                    <td class="pat-assessment">5</td>
+                    <td class="pat-accept-reject">
+                        <button type="button" class="btn btn-success" id="Y-Z-y@z.com" data-toggle="modal" data-target="#myModal">Schedule</button>
+                        <button type="button" class="btn btn-danger" id="Y_Z_y@z.com" data-toggle="modal" data-target="#myModal">Refuse</button>
+                        <button type="button" class="btn btn-info" id="CDEABCDEA" data-toggle="modal" data-target="#myModal">Detailed Score</button>
+                        <button type="button" class="btn btn-warning" id="Y__Z__y@z.com" data-toggle="modal" data-target="#myModal">Assign</button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
         </div>

@@ -89,7 +89,7 @@ main{
 .list-table button{
     border-radius: 0!important;
 }
-.list-table th{
+.list-table th, .modal-body th{
     text-align: center;
 }
 .display-none{
@@ -142,4 +142,39 @@ button:focus{
     max-width: 100px;
     margin:10px 0;
   }
+
+  #myModal{
+    background-color: white;
+  }
    
+  .modal-body input, .modal-body select{
+    margin-bottom: 30px;
+    width: 700px;
+    padding: 10px;
+  }
+
+  .modal-body textarea{
+    width: 700px;
+    height: 200px;
+    padding: 10px;
+  }
+  .modal-body a{
+   color: white!important;
+  }
+  .modal-body p{
+    margin: 20px;
+    font-weight: bold;
+  }
+
+  .modal-body table{
+    margin: 50px 150px;
+  }
+
+  .modal-body th, .modal-body td{
+    padding: 20px;
+  }
+
+  .modal-body thead{
+    background-color: #0c649f;
+    color:white;
+  }
