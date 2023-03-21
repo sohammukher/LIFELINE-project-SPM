@@ -2,7 +2,23 @@ package com.lifeline.lifeline2.controllers;
 
 import java.sql.Date;
 
+//package com.lifeline.lifeline2.controllers;
+
+
+//JDBC IMPORT
+import java.sql.*;
+
+import java.sql.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +28,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.lifeline.lifeline2.models.Patient;
 import com.lifeline.lifeline2.services.LoginService;
 import com.lifeline.lifeline2.services.PatientService;
-
 
 @Controller
 public class PatientController {
@@ -29,7 +42,7 @@ public class PatientController {
 	private LoginService loginService;
 	
 	@PostMapping("/saveSelfAssessment")
-	public ResponseEntity<String> saveSelfAssessment(@RequestBody String assessment_details) throws JsonMappingException, JsonProcessingException {
+	public ResponseEntity<String> saveSelfAssessment(@RequestBody String assessment_details) throws JsonProcessingException, JsonProcessingException {
 		System.out.println("Reached save patient : "+assessment_details);
 		String response = patientService.saveSelfAssessment(assessment_details);
 		return ResponseEntity.ok(response);
@@ -118,4 +131,81 @@ public class PatientController {
 		model.addAttribute(patient);
 		return "profile";
 	}
+
+
+	// Soham API Starts HERE.......
+
+
+	@GetMapping("/getSelfAssessmentScores")  //API 1
+	public ResponseEntity<JSONArray> getPatientAssessment(Model model) throws Exception {
+
+		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
+
+		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
+		String user = "sql9600624";
+		String password = "MUQNntyZ4Y";
+		String query = "SELECT patient.first_name, patient.last_name, patient.email,\n" +
+				"self_assessment.question1, self_assessment.question2,self_assessment.question3,self_assessment.question4,self_assessment.question5,self_assessment.question6,self_assessment.question7,self_assessment.question8,self_assessment.question9,\n" +
+				"self_assessment.self_assessment_score\n" +
+				"FROM patient\n" +
+				"JOIN self_assessment\n" +
+				"ON patient.self_assessment_id=self_assessment.self_assessment_id;";
+
+		Connection con = DriverManager.getConnection(url, user, password);
+		Statement st = con.createStatement();
+
+		ResultSet resultSet = st.executeQuery(query);//Executing Query
+
+		//Converting Result Set To JSON:
+
+		ResultSetMetaData md = resultSet.getMetaData();
+		int numCols = md.getColumnCount();
+		List<String> colNames = IntStream.range(0, numCols)
+				.mapToObj(i -> {
+					try {
+						return md.getColumnName(i + 1);
+					} catch (SQLException e) {
+						e.printStackTrace();
+						return "?";
+					}
+				})
+				.collect(Collectors.toList());
+
+		JSONArray result = new JSONArray();
+		while (resultSet.next()) {
+			JSONObject row = new JSONObject();
+			colNames.forEach(cn -> {
+				try {
+					row.put(cn, resultSet.getObject(cn));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+			result.add(row);// Contains the JSON_ARRAY
+		}
+
+
+		//Conversion Ended....
+
+
+		//Printing The JSON ARRAY :
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("result", result);
+
+		// Default print without indent factor
+		System.out.println(jsonObject);
+
+		// Pretty print with 2 indent factor
+		System.out.println(jsonObject.toString());
+		st.close();
+		con.close();
+
+//		System.out.println("SOHAM INSIDE SELF ASSESSMENT API : "+pid);
+		System.out.println("HIT THE END, It worked, NEW NEW");
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+
+	}
+
 }
