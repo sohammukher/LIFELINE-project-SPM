@@ -136,7 +136,7 @@ public class PatientController {
 	// Soham API Starts HERE.......
 
 
-	@GetMapping("/getSelfAssessmentScores")  //API 1
+	@GetMapping("/getSelfAssessmentScores")  //API #1
 	public ResponseEntity<JSONArray> getPatientAssessment(Model model) throws Exception {
 
 		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
