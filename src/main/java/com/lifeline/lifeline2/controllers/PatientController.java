@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.lifeline.lifeline2.models.Counsellor;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.lifeline.lifeline2.models.Patient;
 import com.lifeline.lifeline2.services.LoginService;
@@ -131,80 +128,5 @@ public class PatientController {
 		model.addAttribute(patient);
 		return "profile";
 	}
-
-
-	// Soham API Starts HERE.......
-
-
-	@GetMapping("/getSelfAssessmentScores")  //API #1
-	public ResponseEntity<JSONArray> getSelfAssessmentScores(Model model) throws Exception {
-
-		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
-
-		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
-		String user = "sql9600624";
-		String password = "MUQNntyZ4Y";
-		String query = "SELECT patient.first_name, patient.last_name, patient.email,\n" +
-				"self_assessment.question1, self_assessment.question2,self_assessment.question3,self_assessment.question4,self_assessment.question5,self_assessment.question6,self_assessment.question7,self_assessment.question8,self_assessment.question9,\n" +
-				"self_assessment.self_assessment_score\n" +
-				"FROM patient\n" +
-				"JOIN self_assessment\n" +
-				"ON patient.self_assessment_id=self_assessment.self_assessment_id;";
-
-		Connection con = DriverManager.getConnection(url, user, password);
-		Statement st = con.createStatement();
-
-		ResultSet resultSet = st.executeQuery(query);//Executing Query
-
-		//Converting Result Set To JSON:
-
-		ResultSetMetaData md = resultSet.getMetaData();
-		int numCols = md.getColumnCount();
-		List<String> colNames = IntStream.range(0, numCols)
-				.mapToObj(i -> {
-					try {
-						return md.getColumnName(i + 1);
-					} catch (SQLException e) {
-						e.printStackTrace();
-						return "?";
-					}
-				})
-				.collect(Collectors.toList());
-
-		JSONArray result = new JSONArray();
-		while (resultSet.next()) {
-			JSONObject row = new JSONObject();
-			colNames.forEach(cn -> {
-				try {
-					row.put(cn, resultSet.getObject(cn));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			});
-			result.add(row);// Contains the JSON_ARRAY
-		}
-
-
-		//Conversion Ended....
-
-
-		//Printing The JSON ARRAY :
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("result", result);
-
-		// Default print without indent factor
-		System.out.println(jsonObject);
-
-		// Pretty print with 2 indent factor
-		System.out.println(jsonObject.toString());
-		st.close();
-		con.close();
-
-//		System.out.println("SOHAM INSIDE SELF ASSESSMENT API : "+pid);
-		System.out.println("HIT THE END, It worked, NEW NEW");
-
-		return new ResponseEntity<>(result, HttpStatus.OK);
-
-	}
 }
+
