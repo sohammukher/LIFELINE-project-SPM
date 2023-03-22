@@ -149,7 +149,8 @@ public class PatientService {
 		
 		for(int i=0; i < list_of_appointments.size() ;i++) {
 			JSONObject ap = new JSONObject();
-			ap.put("ap_time", list_of_appointments.get(i).getaTime());
+			// ap.put("ap_time", list_of_appointments.get(i).getaTime());
+			ap.put("ap_time", list_of_appointments.get(i).getaTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			ap.put("status", list_of_appointments.get(i).getStatus());
 			ap.put("ap_id", list_of_appointments.get(i).getAid());
 			ap.put("did", list_of_appointments.get(i).getDid());
@@ -163,6 +164,7 @@ public class PatientService {
 		response.put("status", "success");
 		}
 		catch(Exception e) {
+			System.out.println(e.getMessage());
 			response.put("appointments", "");
 			response.put("status", "failed");
 		}
