@@ -10,6 +10,7 @@ import java.sql.*;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -128,5 +129,8 @@ public class PatientController {
 		model.addAttribute(patient);
 		return "profile";
 	}
+
+
+
 }
 

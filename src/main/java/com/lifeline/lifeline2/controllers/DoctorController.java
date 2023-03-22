@@ -90,55 +90,71 @@ public class DoctorController {
 				"JOIN self_assessment\n" +
 				"ON patient.self_assessment_id=self_assessment.self_assessment_id;";
 
-		Connection con = DriverManager.getConnection(url, user, password);
-		Statement st = con.createStatement();
+		JSONObject jsonObject = null;
+		Connection con = null;
+		Statement st = null;
+		JSONArray result = null;
 
-		ResultSet resultSet = st.executeQuery(query);//Executing Query
+		try {
 
-		//Converting Result Set To JSON:
+			con = DriverManager.getConnection(url, user, password);
+			st = con.createStatement();
 
-		ResultSetMetaData md = resultSet.getMetaData();
-		int numCols = md.getColumnCount();
-		List<String> colNames = IntStream.range(0, numCols)
-				.mapToObj(i -> {
+			ResultSet resultSet = st.executeQuery(query);//Executing Query
+
+			//Converting Result Set To JSON:
+
+			ResultSetMetaData md = resultSet.getMetaData();
+			int numCols = md.getColumnCount();
+			List<String> colNames = IntStream.range(0, numCols)
+					.mapToObj(i -> {
+						try {
+							return md.getColumnName(i + 1);
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return "Exception occurred";
+						}
+					})
+					.collect(Collectors.toList());
+
+			 result = new JSONArray();
+			while (resultSet.next()) {
+				JSONObject row = new JSONObject();
+				colNames.forEach(cn -> {
 					try {
-						return md.getColumnName(i + 1);
-					} catch (SQLException e) {
+						row.put(cn, resultSet.getObject(cn));
+					} catch (Exception e) {
 						e.printStackTrace();
-						return "Exception occurred";
 					}
-				})
-				.collect(Collectors.toList());
+				});
+				result.add(row);// Contains the JSON_ARRAY
+			}
 
-		JSONArray result = new JSONArray();
-		while (resultSet.next()) {
-			JSONObject row = new JSONObject();
-			colNames.forEach(cn -> {
-				try {
-					row.put(cn, resultSet.getObject(cn));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			});
-			result.add(row);// Contains the JSON_ARRAY
+
+			//Conversion Ended....
+
+
+			//Printing The JSON ARRAY :
+
+			jsonObject = new JSONObject();
+			jsonObject.put("result", result);
+
+			// Default print without indent factor
+			System.out.println(jsonObject);
 		}
+	catch (Exception e){
+		System.out.println(e);
+	}
+	finally {
+			st.close();
+			con.close();
+			System.out.println("Connection Closed Successfully..");
 
-
-		//Conversion Ended....
-
-
-		//Printing The JSON ARRAY :
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("result", result);
-
-		// Default print without indent factor
-		System.out.println(jsonObject);
+		}
 
 		// Pretty print with 2 indent factor
 		System.out.println(jsonObject.toString());
-		st.close();
-		con.close();
+
 
 //		System.out.println("SOHAM INSIDE SELF ASSESSMENT API : "+pid);
 		System.out.println("HIT THE END, It worked, NEW NEW");
@@ -149,6 +165,8 @@ public class DoctorController {
 	@GetMapping("/getAllDoctors")  //API #3
 	public ResponseEntity<JSONArray> getAllDoctors(Model model) throws Exception {
 
+		System.out.println("Inside getAllDoctors");
+
 		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
 
 		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
@@ -157,55 +175,69 @@ public class DoctorController {
 		String query = "SELECT doctor_id, first_name, last_name, email\n" +
 				"\t\tFROM doctor;";
 
-		Connection con = DriverManager.getConnection(url, user, password);
-		Statement st = con.createStatement();
+		Connection con = null;
+		Statement st = null;
+		JSONArray result = null;
 
-		ResultSet resultSet = st.executeQuery(query);//Executing Query
+		try {
 
-		//Converting Result Set To JSON:
+			con = DriverManager.getConnection(url, user, password);
+			st = con.createStatement();
 
-		ResultSetMetaData md = resultSet.getMetaData();
-		int numCols = md.getColumnCount();
-		List<String> colNames = IntStream.range(0, numCols)
-				.mapToObj(i -> {
+			ResultSet resultSet = st.executeQuery(query);//Executing Query
+
+			//Converting Result Set To JSON:
+
+			ResultSetMetaData md = resultSet.getMetaData();
+			int numCols = md.getColumnCount();
+			List<String> colNames = IntStream.range(0, numCols)
+					.mapToObj(i -> {
+						try {
+							return md.getColumnName(i + 1);
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return "Exception occurred";
+						}
+					})
+					.collect(Collectors.toList());
+
+			result = new JSONArray();
+			while (resultSet.next()) {
+				JSONObject row = new JSONObject();
+				colNames.forEach(cn -> {
 					try {
-						return md.getColumnName(i + 1);
-					} catch (SQLException e) {
+						row.put(cn, resultSet.getObject(cn));
+					} catch (Exception e) {
 						e.printStackTrace();
-						return "Exception occurred";
 					}
-				})
-				.collect(Collectors.toList());
+				});
+				result.add(row);// Contains the JSON_ARRAY
+			}
 
-		JSONArray result = new JSONArray();
-		while (resultSet.next()) {
-			JSONObject row = new JSONObject();
-			colNames.forEach(cn -> {
-				try {
-					row.put(cn, resultSet.getObject(cn));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			});
-			result.add(row);// Contains the JSON_ARRAY
+
+			//Conversion Ended....
+
+
+			//Printing The JSON ARRAY :
+
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("result", result);
+
+			// Default print without indent factor
+			System.out.println(jsonObject);
+
+			// Pretty print with 2 indent factor
+			System.out.println(jsonObject.toString());
+		}
+		catch (Exception e){
+			System.out.println(e);
+		}
+		finally {
+			st.close();
+			con.close();
+			System.out.println("Connection Closed Successfully...");
 		}
 
-
-		//Conversion Ended....
-
-
-		//Printing The JSON ARRAY :
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("result", result);
-
-		// Default print without indent factor
-		System.out.println(jsonObject);
-
-		// Pretty print with 2 indent factor
-		System.out.println(jsonObject.toString());
-		st.close();
-		con.close();
 
 		System.out.println("HIT THE END, API 3 worked");
 
