@@ -50,7 +50,7 @@ public class Patient {
 	@Column(name="doctor_app_id")
 	int did;
 	
-	@Column(name="self_assment_id")
+	@Column(name="self_assessment_id")
 	int sid;
 
 	@Column(name="date_of_birth")

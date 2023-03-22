@@ -29,8 +29,19 @@ public class Login {
 	@Column(name="type")
 	String type;
 	
+	@Column(name="approved")
+	String approved;
+	
 	public String toString() {
 		return uid+"  "+password+"  "+type;
+	}
+
+	public String getApproved() {
+		return approved;
+	}
+
+	public void setApproved(String approved) {
+		this.approved = approved;
 	}
 
 	public String getUid() {
