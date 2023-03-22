@@ -7,14 +7,13 @@ import java.util.stream.IntStream;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.lifeline.lifeline2.models.Counsellor;
 import com.lifeline.lifeline2.models.Doctor;
@@ -117,7 +116,7 @@ public class DoctorController {
 					})
 					.collect(Collectors.toList());
 
-			 result = new JSONArray();
+			result = new JSONArray();
 			while (resultSet.next()) {
 				JSONObject row = new JSONObject();
 				colNames.forEach(cn -> {
@@ -141,11 +140,9 @@ public class DoctorController {
 
 			// Default print without indent factor
 			System.out.println(jsonObject);
-		}
-	catch (Exception e){
-		System.out.println(e);
-	}
-	finally {
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
 			st.close();
 			con.close();
 			System.out.println("Connection Closed Successfully..");
@@ -228,11 +225,9 @@ public class DoctorController {
 
 			// Pretty print with 2 indent factor
 			System.out.println(jsonObject.toString());
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			System.out.println(e);
-		}
-		finally {
+		} finally {
 			st.close();
 			con.close();
 			System.out.println("Connection Closed Successfully...");
@@ -243,5 +238,168 @@ public class DoctorController {
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
+//	-----------------Adding Two APIs to View Future and Past Appointments----------
+@GetMapping("/getFutureAppointments/{doctor_email}")  //API #4
+public ResponseEntity<JSONArray> getFutureAppointments(@PathVariable String doctor_email, Model model) throws Exception {
+
+	Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
+
+	String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
+	String user = "sql9600624";
+	String password = "MUQNntyZ4Y";
+	String query = "select patient.email, patient.first_name, patient.last_name, self_assessment.self_assessment_score, self_assessment.appointment_status from patient JOIN self_assessment ON \n" +
+			"patient.self_assessment_id = self_assessment.self_assessment_id where patient.doctor_app_id = (\n" +
+			"select doctor_id from doctor where email = '"+doctor_email+"') and patient.doctor_app_id IN (select doctor_id from appointment where appointment_time  >= CURDATE());";
+
+	Connection con = null;
+	Statement st = null;
+	JSONArray result = null;
+
+
+	try {
+		con = DriverManager.getConnection(url, user, password);
+		st = con.createStatement();
+
+		ResultSet resultSet = st.executeQuery(query);//Executing Query
+
+		//-------------------------
+
+		//Converting Result Set To JSON:
+
+		ResultSetMetaData md = resultSet.getMetaData();
+		int numCols = md.getColumnCount();
+		List<String> colNames = IntStream.range(0, numCols)
+				.mapToObj(i -> {
+					try {
+						return md.getColumnName(i + 1);
+					} catch (SQLException e) {
+						e.printStackTrace();
+						return "Exception occurred";
+					}
+				})
+				.collect(Collectors.toList());
+
+		result = new JSONArray();
+		while (resultSet.next()) {
+			JSONObject row = new JSONObject();
+			colNames.forEach(cn -> {
+				try {
+					row.put(cn, resultSet.getObject(cn));
+				} catch (Exception e) {
+					e.printStackTrace();
+
+				}
+			});
+			result.add(row);// Contains the JSON_ARRAY
+		}
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("result", result);
+
+		// Default print without indent factor
+		System.out.println(jsonObject);
+
+		// Pretty print with 2 indent factor
+		System.out.println(jsonObject.toString());
+
+	}
+	catch (Exception e){
+		System.out.println(e);
+
+	}
+	finally {
+		st.close();
+		con.close();
+		System.out.println("Connection Closed");
+	}
+
+	//Printing The JSON ARRAY :
+
+
+	System.out.println("HIT THE END, API 4 worked");
+
+	return new ResponseEntity<>(result, HttpStatus.OK);
 }
 
+	@GetMapping("/getPastAppointments/{doctor_email}")  //API #4
+	public ResponseEntity<JSONArray> getPastAppointments(@PathVariable String doctor_email, Model model) throws Exception {
+
+		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
+
+		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
+		String user = "sql9600624";
+		String password = "MUQNntyZ4Y";
+		String query = "select patient.email, patient.first_name, patient.last_name, self_assessment.self_assessment_score, self_assessment.appointment_status from patient JOIN self_assessment ON \n" +
+				"patient.self_assessment_id = self_assessment.self_assessment_id where patient.doctor_app_id = (\n" +
+				"select doctor_id from doctor where email = '"+doctor_email+"') and patient.doctor_app_id IN (select doctor_id from appointment where appointment_time  < CURDATE());";
+
+		Connection con = null;
+		Statement st = null;
+		JSONArray result = null;
+
+
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			st = con.createStatement();
+
+			ResultSet resultSet = st.executeQuery(query);//Executing Query
+
+			//-------------------------
+
+			//Converting Result Set To JSON:
+
+			ResultSetMetaData md = resultSet.getMetaData();
+			int numCols = md.getColumnCount();
+			List<String> colNames = IntStream.range(0, numCols)
+					.mapToObj(i -> {
+						try {
+							return md.getColumnName(i + 1);
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return "Exception occurred";
+						}
+					})
+					.collect(Collectors.toList());
+
+			result = new JSONArray();
+			while (resultSet.next()) {
+				JSONObject row = new JSONObject();
+				colNames.forEach(cn -> {
+					try {
+						row.put(cn, resultSet.getObject(cn));
+					} catch (Exception e) {
+						e.printStackTrace();
+
+					}
+				});
+				result.add(row);// Contains the JSON_ARRAY
+			}
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("result", result);
+
+			// Default print without indent factor
+			System.out.println(jsonObject);
+
+			// Pretty print with 2 indent factor
+			System.out.println(jsonObject.toString());
+
+		}
+		catch (Exception e){
+			System.out.println(e);
+
+		}
+		finally {
+			st.close();
+			con.close();
+			System.out.println("Connection Closed");
+		}
+
+		//Printing The JSON ARRAY :
+
+
+		System.out.println("HIT THE END, API 4 worked");
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+}
