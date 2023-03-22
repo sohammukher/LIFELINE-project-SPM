@@ -36,7 +36,7 @@ public class PatientController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/pastSelfAssesments")
+	@PostMapping("/pastSelfAssesments")
 	public ResponseEntity<String> pastSelfAssesments(@RequestBody String id) throws JsonMappingException, JsonProcessingException, ClassNotFoundException, SQLException {
 		System.out.println("pastSelfAssesments :: For "+id);
 		String response = patientService.getPastAssessments(id);
