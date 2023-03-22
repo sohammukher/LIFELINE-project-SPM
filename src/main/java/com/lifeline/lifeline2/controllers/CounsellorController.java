@@ -85,9 +85,9 @@ public class CounsellorController {
 				"appointment.appointment_time, appointment.status\n" +
 				"FROM patient\n" +
 				"JOIN appointment\n" +
-				"ON patient.counsellor_app_id=appointment.counselor_id\n" +
+				"ON patient.counsellor_app_id=appointment.counselor_id AND patient.email=appointment.patient_id\n" +
 				"WHERE appointment.counselor_id= (\n" +
-				"SELECT counselor_id FROM counselor WHERE email=counselor_email\n" +
+				"SELECT counselor_id FROM counselor WHERE email=\'"+counselor_email+"\'\n" +
 				");";
 		Connection con = null;
 		Statement st = null;
@@ -274,12 +274,13 @@ public class CounsellorController {
 		System.out.println(patient_email+" "+appointment_datetime+" "+counselor_email);
 
 
-		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
+		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624?allowMultiQueries=true";
 		String user = "sql9600624";
 		String password = "MUQNntyZ4Y";
 		String query = "INSERT into appointment (patient_id,counselor_id,appointment_time,status)\n" +
 				"VALUES ("+"\'"+patient_email+"\'"+",\n" +
-				"(SELECT counselor_id FROM counselor WHERE email= \'"+counselor_email+"\'),'"+appointment_datetime+"',\'PENDING\');";
+				"(SELECT counselor_id FROM counselor WHERE email= \'"+counselor_email+"\'),'"+appointment_datetime+"',\'PENDING\');\n" +
+				"UPDATE patient SET counsellor_app_id = (SELECT counselor.counselor_id FROM counselor WHERE counselor.email= \'"+counselor_email+"\') WHERE (email=\'"+patient_email+"\');";
 
 		System.out.println("Final Query is : "+query);
 
@@ -331,16 +332,17 @@ public class CounsellorController {
 
 		// POST Data Parameters
 		String patient_email = (String) jsonObject.get("patient_email");
-		Integer doctor_id = (Integer) jsonObject.get("doctor_id");
+		Integer doctor_id = Integer.parseInt((String) jsonObject.get("doctor_id"));
 		String appointment_datetime = (String) jsonObject.get("appointment_datetime");
 
 		System.out.println(patient_email+" "+appointment_datetime+" "+doctor_id);
 
-		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
+		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624?allowMultiQueries=true";
 		String user = "sql9600624";
 		String password = "MUQNntyZ4Y";
 		String query = "INSERT into appointment (patient_id,doctor_id,appointment_time,status)\n" +
-				"VALUES ('"+patient_email+"','"+doctor_id+"', '"+appointment_datetime+"',\"PENDING\");";
+				"VALUES ('"+patient_email+"','"+doctor_id+"', '"+appointment_datetime+"',\"PENDING\");" +
+				"UPDATE patient SET doctor_app_id ="+doctor_id+" WHERE (email=\'"+patient_email+"\');";
 
 		System.out.println("Final Query is : "+query);
 		Connection con = null;

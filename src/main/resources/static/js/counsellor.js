@@ -1,16 +1,12 @@
 document.addEventListener("DOMContentLoaded", function(event){
     var patList = document.querySelector('.view-patient');
-    var appointmentList = document.querySelector(".view-appointments");
+    var appointmentList = document.querySelector(".appointment-list-table");
     var doctorsList = document.querySelector(".assign-doctors");
     var allTables = document.querySelectorAll(".list-table");
     var loaderContainer = document.querySelector(".loader-container")
     var patientTable =  document.querySelector('.patient-list-table');
     var counsellorTable =  document.querySelector('.doctor-list-table');
     var appointmentsTable =  document.querySelector('.appointment-list-table');
-    let reject = document.querySelectorAll('.btn-danger');
-    let schedule = document.querySelectorAll('.btn-success')
-    let detailedScoreInfo = document.querySelectorAll('.btn-info');
-    let assign = document.querySelectorAll('.btn-warning');
 
     var questions = [
         "Over the past 2 weeks, how often have you been bothered by any of the following problems: Little interest or pleasure in doing things?",
@@ -31,38 +27,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         "D":"Nearly Every Day"
     }
 
-    var doctors = [
-        {
-            "id":1,
-            "first_name":"ABC",
-            "last_name":"XYZ",
-            "email":"abc@xyz.com"
-        },
-        {
-            "id":2,
-            "first_name":"DEF",
-            "last_name":"STU",
-            "email":"def@stu.com"
-        },
-        {
-            "id":1,
-            "first_name":"LMN",
-            "last_name":"IJK",
-            "email":"lmn@ijk.com"
-        },
-        {
-            "id":1,
-            "first_name":"REF",
-            "last_name":"EXM",
-            "email":"ref@exm.com"
-        }
-    ]
-        
-
-
     $(document).ready(function(){
         $.ajax({
-            url:"http://localhost:9999/getPatientAssessmentAPI/1"
+            url:"http://localhost:9999/getSelfAssessmentScores"
         }).then(function(results){
             var count=1;
             var table_body="";
@@ -71,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                             patient.question5+patient.question6+patient.question7+patient.question8+patient.question9;
                 var scheduleString = patient.first_name+"-"+patient.last_name+"-"+patient.email;
                 var refuseString = patient.first_name+"_"+patient.last_name+"_"+patient.email;
+                var assignString = patient.first_name+"__"+patient.last_name+"__"+patient.email;
                 table_body+=
                     `<tr>
                     <th scope="row">${count}</th>
@@ -81,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                         <button type="button" class="btn btn-success" id="${scheduleString}" data-toggle="modal" data-target="#myModal">Schedule</button>
                         <button type="button" class="btn btn-danger" id="${refuseString}" data-toggle="modal" data-target="#myModal">Refuse</button>
                         <button type="button" class="btn btn-info" id="${scoreString}" data-toggle="modal" data-target="#myModal">Detailed Score</button>
+                        <button type="button" class="btn btn-warning" id="${assignString}" data-toggle="modal" data-target="#myModal">Assign</button>
                     </td>
                   </tr>`;
                 count++;
@@ -89,10 +58,33 @@ document.addEventListener("DOMContentLoaded", function(event){
         })
     })
 
-    schedule.forEach((btn,index)=>{
-        btn.addEventListener('click',function(event){
+    $(document).on('click','.assign-doctors', function(event){
+        var counselor_email = window.location.href.split("/")[4];
+        $.ajax({
+            url:"http://localhost:9999/getCounselorAppointments1/"+counselor_email
+        }).then(function(results){
+            var count=1;
+            var table_body="";
+            results.map((patient)=>{
+                var appointmentLiterals = patient.appointment_time.split(":");
+                var appointmentDate = appointmentLiterals[0].substring(0,appointmentLiterals[0].length-3);
+                var appointmentTime = appointmentLiterals[0].substring(appointmentLiterals[0].length-2)+":"+appointmentLiterals[1];
+                table_body+=
+                    `<tr>
+                    <th scope="row">${count}</th>
+                    <td class="pat-name">${patient.first_name} ${patient.last_name}</td>
+                    <td class="pat-email">${patient.email}</td>
+                    <td class="pat-schedule">${appointmentDate} ${appointmentTime}</td>
+                    <td class="pat-status">${patient.status}</td>
+                  </tr>`;
+                count++;
+            })
+            $("#counsellor_appointment_list").html(table_body);
+        })
+    })
+
+    function scheduleAppointment(event){
             var details = this.id.split("-");
-            var html = "";
             document.getElementById('myModal').innerHTML = 
             `<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -110,11 +102,11 @@ document.addEventListener("DOMContentLoaded", function(event){
               <button class="send-appointment-email main-btn" id="${details[2]}">Send Email</button>
               </div>
             `
-        })
-    })
+        }
 
-    reject.forEach((btn,index)=>{
-        btn.addEventListener('click',function(event){
+    $(document).on('click','.btn-success',scheduleAppointment);
+
+    function refusePatient(event){
             var details = this.id.split("_");
         document.getElementById('myModal').innerHTML =
             `<div class="modal-header">
@@ -133,13 +125,12 @@ document.addEventListener("DOMContentLoaded", function(event){
               </textarea><br>
               <button class="send-email main-btn" id="${details[2]}">Send Email</button>
               </div>`
-        })
-    })
+        }
 
-    detailedScoreInfo.forEach((btn,index)=>{
-        btn.addEventListener('click',function(event){
+    $(document).on('click','.btn-danger',refusePatient);
+
+    function openDetailedInfo(event){
             var scores = this.id.split("");
-            console.log(scores);
             var html = 
             `<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -170,12 +161,16 @@ document.addEventListener("DOMContentLoaded", function(event){
             </table>
             </div>`
             document.getElementById('myModal').innerHTML = html;
-        })
-    })
+        }
 
-    assign.forEach((btn,index)=>{
-        btn.addEventListener('click',function(event){
-            var details = this.id.split("__");
+    $(document).on('click','.btn-info',openDetailedInfo);
+
+    function assignDoctor(event){
+        var details = this.id.split("__");
+            $.ajax({
+                url:"http://localhost:9999/getAllDoctors"
+            }).then(function(results){
+                
             var html="";
             html+= 
             `<div class="modal-header">
@@ -192,11 +187,9 @@ document.addEventListener("DOMContentLoaded", function(event){
             <p>Select a doctor: </p>
             <select id="doctor_list">`
 
-            var count=0;
-            doctors.map((doctor)=>{
+            results.map((doctor)=>{
                 html+=
-                `<option value=${doctors[count].id}_${doctors[count].email}>${doctors[count].first_name} ${doctors[count].last_name}</option>`
-                count++;
+                `<option value=${doctor.doctor_id}_${doctor.email}>${doctor.first_name} ${doctor.last_name}</option>`
             })
 
 
@@ -209,13 +202,24 @@ document.addEventListener("DOMContentLoaded", function(event){
               </div>
             `
             document.getElementById('myModal').innerHTML = html;
-        })
-    })
+            })
+        }
+    
+    $(document).on('click','.btn-warning',assignDoctor);
+
+
 
     
     $(document).on('click', '.send-appointment-email', function(){
+        var counselor_email = window.location.href.split("/")[4];
         var email = this.id
         var name = document.getElementById('name').value;
+        var payload = `{"patient_email":"${email}","counselor_email":"${counselor_email}","appointment_datetime":"${document.getElementById('appointment_date').value} ${document.getElementById('appointment_time').value}"}`
+        $.ajax('http://localhost:9999/bookCounsellorAppointment',{
+            'type': 'POST',
+            'data': payload,
+            'contentType':'text/html'
+        })
         var content = 
         "Hello "+name+"!%0D%0A"+ 
         "Thank you for taking time to complete our self assessment test.%0D%0A"+
@@ -243,6 +247,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         var doctor_id = doctor_details[0];
         var doctor_email = doctor_details[1];
         var doctor_name = doctor.options[doctor.selectedIndex].text;
+        var payload = `{"patient_email":"${email}","doctor_id":"${doctor_id}","appointment_datetime":"${document.getElementById('appointment_date').value} ${document.getElementById('appointment_time').value}"}`
+        $.ajax('http://localhost:9999/bookDoctorAppointment',{
+            'type': 'POST',
+            'data': payload,
+            'contentType':'text/html'
+        })
         var content = 
         "Hello "+name+"!%0D%0A%0D%0A"+ 
         "Thank you for taking time to complete our self assessment test.%0D%0A"+
