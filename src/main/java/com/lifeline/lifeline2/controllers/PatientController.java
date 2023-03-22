@@ -43,7 +43,7 @@ public class PatientController {
 		 return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/getAppointments")
+	@PostMapping("/getAppointments")
 	public ResponseEntity<String> getAppointments(@RequestBody String id) throws JsonMappingException, JsonProcessingException {
 		System.out.println("showAppointments :: For "+id);
 		String response = patientService.getAppointments(id);
@@ -130,6 +130,6 @@ public class PatientController {
 	public String showAppointments(@RequestParam String id, Model model) {
 		System.out.println("showAppointments :: For "+id);
 		 //model.addAttribute("appointments", patientService.getAppointments(id));
-		return "appointments";
+		return "patient_appoinment";
 	}
 }
