@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +48,11 @@ public class PatientService {
 		return p;
 	}
 	
-	public String saveSelfAssessment(String assessment_details) throws JsonMappingException, JsonProcessingException {
-		String result="";
-		
+	public String saveSelfAssessment(String assessment_details) throws JsonMappingException, JsonProcessingException, ClassNotFoundException, SQLException {
+		JSONObject rr = new JSONObject();	
+		rr.put("pid", "x@x.com");
+		getAppointments(rr.toJSONString());
+		JSONObject response = new JSONObject();		
 		try {
 		System.out.println("saveSelfAssessment:: Going to save this self assessment form "+assessment_details);
 		AssessmentDetails ad = new AssessmentDetails();
@@ -95,10 +98,13 @@ public class PatientService {
         System.out.println(adp.toString());
         if(compareAssessmentDetails(adp, ad)) {
 		 assessmentDetailRepository.save(ad);
-		 result = "success";
+		 response.put("status", "Success");
+		 response.put("message", "");
         }
         else {
-        	result = "Already filled out assessment form today. [You can fill self assessment only once in a day]";
+        	response.put("status", "failed");
+        	response.put("message", "Already filled out assessment form today. [You can fill self assessment only once in a day]");
+        
         }
         
 		System.out.println("Saved  assessment  is :"+adp);
@@ -107,7 +113,8 @@ public class PatientService {
     		System.out.println("else    is :"+adp);
 
    		 assessmentDetailRepository.save(ad);
-   		result = "success";
+   		response.put("status", "Success");
+		 response.put("message", "");
         }
         adp = assessmentDetailRepository.getAssessmentDetailsbyEmail(pid);
         int sid = adp.getSid();
@@ -115,9 +122,10 @@ public class PatientService {
         
 		}
 		catch(Exception e) {
-			result = "Failed to process";
+			response.put("status", "Failed");
+			 response.put("message", "Failed");
 		}
-		return result;
+		return response.toJSONString();
 	}
 	
 	public boolean compareAssessmentDetails(AssessmentDetails ad1, AssessmentDetails ad2) {
@@ -126,16 +134,45 @@ public class PatientService {
 		return true;
 	}
 	
-	public List<Appointment> getAppointments(String pid) {
-		
+	public String getAppointments(String req) throws JsonMappingException, JsonProcessingException {
+		JSONObject response = new JSONObject();
+		ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(req);
+        
+        String pid = rootNode.get("pid").asText();
 		System.out.println("getAppointments::"+pid);
+		try {
 		List<Appointment> list_of_appointments = appointmentRepository.findBypid(pid);
 		System.out.println(list_of_appointments.toString());
-		return list_of_appointments;
+		
+		JSONArray appointments = new JSONArray();
+		
+		for(int i=0; i < list_of_appointments.size() ;i++) {
+			JSONObject ap = new JSONObject();
+			ap.put("ap_time", list_of_appointments.get(i).getaTime());
+			ap.put("status", list_of_appointments.get(i).getStatus());
+			ap.put("ap_id", list_of_appointments.get(i).getAid());
+			ap.put("did", list_of_appointments.get(i).getDid());
+			ap.put("pid", list_of_appointments.get(i).getPid());
+			ap.put("cid", list_of_appointments.get(i).getCid());
+			ap.put("cancel_by", list_of_appointments.get(i).getCancelled_by());
+			appointments.add(ap);
+		}
+		
+		response.put("appointments", appointments);
+		response.put("status", "success");
+		}
+		catch(Exception e) {
+			response.put("appointments", "");
+			response.put("status", "failed");
+		}
+		System.out.println(response.toJSONString());
+		return response.toJSONString();
 	}
 
 	public String updateAppointmentStatus(String req) {
 		// TODO Auto-generated method stub
+		JSONObject response = new JSONObject();
 		try {
 			System.out.println("saveSelfAssessment:: Going to save this self assessment form "+req);
 			AssessmentDetails ad = new AssessmentDetails();
@@ -146,13 +183,35 @@ public class PatientService {
 	        String pid = rootNode.get("pid").asText();
 	        String aid = rootNode.get("aid").asText();
 	        String ops = rootNode.get("operation").asText();
+	        String ac= "", query="";
+	        if(ops.equalsIgnoreCase("accept")) {
+	        	ac="ACTIVE";
+	        	 query = "UPDATE appointment SET status = \'"+ac+"\' WHERE "
+						+ "patient_id = \""+pid+"\""+ " and appointment_id = \""+aid+"\";";
+	        }
+	        else {
+	        	ac="CANCEL";
+	        	 query = "UPDATE appointment SET status = \'"+ac+"\' , cancelled_by = "
+	        			+ " \' P\' WHERE "
+						+ "patient_id = \""+pid+"\""+ " and appointment_id = \""+aid+"\";";
+	        }
+	        System.out.println(">> "+query);
+	        Statement st = DBAccess.getConnection();
+			
+			//UPDATE user_login SET approved = 'Y' WHERE user_id = "xx@qw.com";
+
+			System.out.println(query);
+			int rowsUpdated = st.executeUpdate(query);
+	        System.out.println("Updated "+rowsUpdated+ " row");
+			response.put("status", "success");
 	        
 		}
 		catch(Exception e)
 		{
 			System.out.println("Failed to extract value.");
+			response.put("status", "failed");
 		}
-		return null;
+		return response.toJSONString();
 	}
 
 	public String getAllPatients() throws SQLException, ClassNotFoundException {
@@ -191,7 +250,7 @@ public class PatientService {
 		patientsList.put("status", "Success");
 		}
 		else {
-			
+			patientsList.put("status", "There are no patients in database.");
 		}
 		}
 		catch(Exception e) {
@@ -199,4 +258,105 @@ public class PatientService {
 		}
 		return patientsList.toJSONString();
 	}
+	
+	public String getPastAssessments(String req) throws SQLException, ClassNotFoundException, JsonMappingException, JsonProcessingException {
+		System.out.println("getPastAssessments:: Going to fetch details ");
+		ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(req);
+        
+        String email = rootNode.get("id").asText();
+		JSONObject response = new JSONObject();
+		try {
+		Statement st = DBAccess.getConnection();
+		String query = "SELECT * FROM self_assessment where email = \""+email+"\";";
+		
+		ResultSet resultSet = st.executeQuery(query);
+		
+		JSONArray assessments = new JSONArray();
+		
+		ResultSetMetaData md = resultSet.getMetaData();
+		System.out.println(">> "+md.getColumnCount());
+		
+		if(md.getColumnCount() > 0) {
+		while(resultSet.next()) {
+			String ans1 = resultSet.getString("question1");
+			String ans2 = resultSet.getString("question2");
+			String ans3 = resultSet.getString("question3");
+			String ans4 = resultSet.getString("question4");
+			String ans5 = resultSet.getString("question5");
+			String ans6 = resultSet.getString("question6");
+			String ans7 = resultSet.getString("question7");
+			String ans8 = resultSet.getString("question8");
+			String ans9 = resultSet.getString("question9");
+			String score = resultSet.getString("self_assessment_score");
+			
+			Date date  = resultSet.getDate("date_taken");
+			System.out.println("date >> "+date);
+			Time time = resultSet.getTime("time_taken");
+			System.out.println("time >> "+time);
+			String status  = resultSet.getString("appointment_status");
+	
+			System.out.println(date+ " - "+time+ " - "+status+ " - "+ans1+" - "+ans2);
+			JSONObject p = new JSONObject();
+			p.put("date", date.toString());
+			p.put("time", time.toString());
+			p.put("status", status);
+			p.put("ans1", ans1);
+			p.put("ans2", ans2);
+			p.put("ans3", ans3);
+			p.put("ans4", ans4);
+			p.put("ans5", ans5);
+			p.put("ans6", ans6);
+			p.put("ans7", ans7);
+			p.put("ans8", ans8);
+			p.put("ans9", ans9);
+			p.put("score", score );
+			System.out.println("p >>> "+p.toJSONString());
+			assessments.add(p);
+		}
+		
+		response.put("assessments", assessments);
+		response.put("status", "Success");
+		}
+		else {
+			response.put("assessments", "There are no assessment");
+			response.put("status", "Failed");
+		}
+		}
+		catch(Exception e) {
+			response.put("status", "Failed to fetch data.");
+		}
+		System.out.println(">>> "+response.toJSONString());
+		return response.toJSONString();
+	}
+
+	
+	public String updatePatientProfile(String address, String mobileNumber, String chars, String history,
+			String email) {
+		String response ="";
+		try {
+			System.out.println("updatePatientProfile:: Going to update the patient ");			
+				        
+	        Statement st = DBAccess.getConnection();
+			String query = "UPDATE patient SET address = \'"+address+"\' , symptoms ="
+					+ " \'"+ chars+"\' , past_medical_hist = \'"+ history+"\' WHERE "
+					+ "email = \""+email+"\";";
+			//UPDATE user_login SET approved = 'Y' WHERE user_id = "xx@qw.com";
+
+			System.out.println(query);
+			int rowsUpdated = st.executeUpdate(query);
+	        System.out.println("Updated "+rowsUpdated+ " row");
+			response = "success";
+		}
+		catch(Exception e)
+		{
+			System.out.println("Failed to extract value.");
+			response = "failed";
+		}
+		//return response.toJSONString();
+		
+		return response;
+	}
+	
+	
 }

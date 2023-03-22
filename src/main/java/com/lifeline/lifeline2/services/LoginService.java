@@ -29,6 +29,8 @@ public class LoginService {
 		login.setUid(userid);
 		login.setPassword(encodedPassword);
 		login.setType(type);
+		if(type.equals("P"))
+			login.setApproved("Y");
 		System.out.println("Login info is >> "+login);
 		loginRepository.save(login);
 	}
@@ -47,23 +49,37 @@ public class LoginService {
 	        String email = rootNode.get("id").asText();
 	        String action = rootNode.get("action").asText();
 	        String ac = "";
-	        
-	        if(action.equals("accept"))
-	        	ac="Y";
-	        else
-	        	ac="N";
-	        
+	        String query = "";
+	        int rowsUpdated=0;
 	        Statement st = DBAccess.getConnection();
-			String query = "UPDATE user_login SET approved = \'"+ac+"\' WHERE "
-					+ "user_id = \""+email+"\";";
+	        if(action.equals("accept")) {
+	        	ac="Y";
+	        	 query = "UPDATE user_login SET approved = \'"+ac+"\' WHERE "
+						+ "user_id = \""+email+"\";";	
+	        	  rowsUpdated = st.executeUpdate(query);
+	        }
+	        else {
+	        	System.out.println("going to delete the user");
+	        	ac="N";
+	        	 query = "DELETE FROM user_login  WHERE "
+						+ "user_id = \""+email+"\";";
+	        	 System.out.println(query);
+	        	  boolean ans =  st.execute(query);
+	        }
+	        
+	       
+//			String query = "UPDATE user_login SET approved = \'"+ac+"\' WHERE "
+//					+ "user_id = \""+email+"\";";
+			//UPDATE user_login SET approved = 'Y' WHERE user_id = "xx@qw.com";
+
 			System.out.println(query);
-			int rowsUpdated = st.executeUpdate(query);
+			
 	        System.out.println("Updated "+rowsUpdated+ " row");
 			response.put("status", "success");
 		}
 		catch(Exception e)
 		{
-			System.out.println("Failed to extract value.");
+			System.out.println("Failed to extract value.-- "+e.getMessage());
 			response.put("status", "failed");
 		}
 		return response.toJSONString();
@@ -93,5 +109,5 @@ public class LoginService {
 			response.put("status", "failed");
 		}
 		return response.toJSONString();
-	}
+	} 
 }
