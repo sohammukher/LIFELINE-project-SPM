@@ -12,19 +12,7 @@ const severityBgColorMap = {
   3: 'badge badge-pill badge-warning bg-warning ',
   4: 'badge badge-pill badge-danger bg-danger ',
 };
-const severityVsBackgroundMap = {
-  0: 'alert-success ',
-  1: 'alert-info ',
-  2: 'alert-primary ',
-  3: 'alert-warning ',
-  4: 'alert-danger ',
-};
-const globalScoreMap = {
-  a:0,
-  b:1,
-  c:2,
-  d:3,
-};
+
 const app = Vue.createApp({
   data() {
     return {
@@ -307,8 +295,6 @@ const app = Vue.createApp({
       currentIndex: 0,
       currentQuestion: {},
       finished: false,
-      pastAssessments: [],
-      isPastDataQueried: false
     };
   },
   methods: {
@@ -348,17 +334,13 @@ const app = Vue.createApp({
     toHtml: function(inputText) {
       return `<span>${inputText}</span>`;
     },
-    getCurrentUserId: function() {
-		return new URLSearchParams(window.location.search).get("id");
-	},
     saveResult: function() {
       console.log('saving results..');
       if(this.totalScore != null && this.totalScore != undefined) {
-        // let pathName = '/patient/adityajoshi.sfdc@gmail.com' || window.location.pathname;
-        // pathName = pathName.endsWith("/") ? pathName.substring(0, pathName.length - 1) : pathName;
-        // const parts = pathName.split("/");
-        // let pId = parts[parts.length - 1];
-        let pId = this.getCurrentUserId();
+        let pathName = '/patient/adityajoshi.sfdc@gmail.com' || window.location.pathname;
+        pathName = pathName.endsWith("/") ? pathName.substring(0, pathName.length - 1) : pathName;
+        const parts = pathName.split("/");
+        const pId = parts[parts.length - 1];
         const dataBody = {
           pId,
           form: this.qa,
@@ -371,7 +353,7 @@ const app = Vue.createApp({
           body: JSON.stringify(dataBody)
         })
         .then(async (resp) => {
-          console.log('resp obtained' + resp);
+          console.log('resp obtained');
           const respJson = await resp.json();
           console.log(respJson);
           if(respJson && respJson.status) {
@@ -390,119 +372,7 @@ const app = Vue.createApp({
         const parts = pathName.split("/");
         const pId = parts[parts.length - 1];
 		this.redirectToPatientLandingPage(pId);
-	},
-    getUserNameFromUrl: function() {
-      let pathName = '/patient/adityajoshi.sfdc@gmail.com' || window.location.pathname;
-      pathName = pathName.endsWith("/") ? pathName.substring(0, pathName.length - 1) : pathName;
-      const parts = pathName.split("/");
-      return parts[parts.length - 1];
-    },
-    fetchPastAssessments: function() {
-      return new Promise(async (resolve) => {
-         const resp = await fetch("http://localhost:8080/pastSelfAssesments", {
-           method: "POST",
-           body: JSON.stringify({
-             id: this.getCurrentUserId()
-           })
-         });
-        const tempRes = {
-          "assessments": [
-            {
-              "date": "2023-03-14",
-              "ans3": "d",
-              "ans2": "d",
-              "ans5": "c",
-              "ans4": "b",
-              "ans1": "d",
-              "time": "05:01:05",
-              "ans7": "b",
-              "ans6": "a",
-              "ans9": "a",
-              "status": "Pending",
-              "ans8": "a",
-            },
-            {
-              "date": "2023-03-15",
-              "ans3": "d",
-              "ans2": "d",
-              "ans5": "d",
-              "ans4": "d",
-              "ans1": "d",
-              "time": "00:27:13",
-              "ans7": "d",
-              "ans6": "d",
-              "ans9": "d",
-              "status": "Pending",
-              "ans8": "d",
-            },
-            {
-              "date": "2023-03-20",
-              "ans3": "c",
-              "ans2": "b",
-              "ans5": "b",
-              "ans4": "a",
-              "ans1": "d",
-              "time": "18:07:32",
-              "ans7": "d",
-              "ans6": "c",
-              "ans9": "d",
-              "status": "Pending",
-              "ans8": "d",
-            }
-          ],
-          "status": "Success"
-        };
-        //const jsonResponse = tempRes;
-        const jsonResponse = await resp.json();
-        if (jsonResponse != null && jsonResponse != undefined) {
-          resolve(jsonResponse.assessments);
-        } else {
-          reject(jsonResponse);
-        }
-      });
-    },
-    convertToDate: function(dtStr) {
-      return new Date(Date.parse(dtStr));
-    },
-    showPreviousAssessments: function() {
-      this.isPastDataQueried = !this.isPastDataQueried;
-      this.fetchPastAssessments()
-        .then((pastAssessmentsList) => {
-          pastAssessmentsList.forEach((item, index) => {
-            let answers = {};
-            const calcScore = ((item.score === undefined) || (item.score === null));
-            let itemScore = calcScore ? 0 : (item.score);
-            Object.keys(item)
-              .filter(k => k.startsWith("ans"))
-              .forEach(k => {
-                console.log(k.substring(3, k.length));
-                answers[parseInt(k.substring(3, k.length)) - 1] = item[k];
-                if(calcScore) {
-                  itemScore += globalScoreMap[item[k]];
-                }
-              });
-            console.log(answers);
-            item.answers = answers;
-            item.assessmentIndex = 'aIndex_' + index;
-            item.dateAndTime = this.convertToDate(item.date + 'T' + item.time).toDateString();
-            
-            const depStatus = this.checkDepressionStatus(itemScore);
-            item.depressionStatus = depStatus ? depStatus.label : '';
-            item.depressionLevel = depStatus ? depStatus.level : 0;
-            item.bgColor = severityVsBackgroundMap[item.depressionLevel];
-            item.textColor = severityTextColorMap[item.depressionLevel];
-            
-          });
-          this.pastAssessments = pastAssessmentsList;
-        });
-    },
-    checkDepressionStatus: function(testScore) {
-      if (testScore >= 0 && testScore <= 4) return { label: 'Minimal', level: 0 };
-      else if (testScore >= 5 && testScore <= 9) return { label: 'Mild', level: 1 };
-      else if (testScore >= 10 && testScore <= 14) return { label: 'Moderate', level: 2 };
-      else if (testScore >= 15 && testScore <= 19) return { label: 'High', level: 3 };
-      else return { label: 'Severe', level: 4 };
-    }
+	}
   },
   computed: {
     numOfAnsweredQuestions() {
@@ -548,26 +418,17 @@ const app = Vue.createApp({
       );
     },
     depressionStatus() {
-	  /*
       if (this.totalScore >= 0 && this.totalScore <= 4) return { label: 'Minimal', level: 0 };
       else if (this.totalScore >= 5 && this.totalScore <= 9) return { label: 'Mild', level: 1 };
       else if (this.totalScore >= 10 && this.totalScore <= 14) return { label: 'Moderate', level: 2 };
       else if (this.totalScore >= 15 && this.totalScore <= 19) return { label: 'High', level: 3 };
       else return { label: 'Severe', level: 4 };
-      */
-      return this.checkDepressionStatus(this.totalScore);
     },
     depressionLevelTextColor() {
       return severityTextColorMap[this.depressionStatus.level];
     },
     totalScoreDisplayClass() {
       return severityBgColorMap[this.depressionStatus.level];
-    },
-    noPastAssessments() {
-      return this.pastAssessments.length === 0 ? true : false;
-    },
-    pastAssessmentsBtnLabel() {
-      return !this.isPastDataQueried ? 'Show Assessment History' : 'Hide History';
     }
   }
 });

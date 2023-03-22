@@ -12,98 +12,21 @@
 <body>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <section class="bg-light px-4 py-4">
-	
     <div id="app" class="container">
-      <div v-if="showCoverPage" class="showcase-container text-center px-5">
-		
+      <div v-if="showCoverPage" class="showcase-container text-center">
         <h2 class="header-text text-center mb-4">
           {{headerTitle}}
         </h2>
-        <p class="description text-secondary text-center px-5">
+        <p class="description text-secondary text-center ">
           Regular check-ups can help find potential health issues before they become a problem. When you see your doctor
           regularly, they are able to detect health conditions or diseases early. Early detection gives you the best
           chance for getting the right treatment quickly, avoiding any complications. By getting the correct health
           services, screenings, and treatment you are taking important steps toward living a longer, healthier life.
         </p>
-        <div class="w-100 d-flex flex-column justify-content-center align-items-center btn-container">
-          <button type="button" class="btn btn-dark m-2" @click="startAssessment()">
-            {{proceedBtnLabel}}
-            <i class="bi bi-arrow-right ms-1"></i>
-          </button>
-          <button type="button" class="btn btn-sm btn-link m-2" @click="showPreviousAssessments()">
-            {{pastAssessmentsBtnLabel}}
-          </button>
-        </div>
-        
-        <div v-if="isPastDataQueried" class="w-100 py-3 px-5">
-	        <div v-if="noPastAssessments" class="w-100 text-center alert alert-warning" role="alert">
-	          There have not been any Self Assessments done in the past.
-	        </div>
-	        <div v-if="!noPastAssessments"
-	          class=" d-flex flex-column justify-content-start align-items-start past-assessments-data-container">
-	          <div
-	            class="w-100 mt-2 mb-3 past-assessments-header d-flex justify-content-between justify-content-md-start align-items-center">
-	            <h4 class="d-inline-flex m-0">
-	              Your Assessments
-	            </h4>
-	            <div class="ms-2 ps-1 past-assessments-count">
-	              <span class="badge bg-primary">{{pastAssessments.length}}</span>
-	            </div>
-	          </div>
-	          <div class="w-100 accordion accordion-flush" id="pastResultsAccordion">
-	            <div v-for="(item, index) in pastAssessments" class="accordion-item">
-	              <h2 :class="`m-0 accordion-header`" :id="`heading_${item.assessmentIndex}`">
-	                <button :class="`accordion-button `" type="button" data-bs-toggle="collapse"
-	                  :data-bs-target="`${'#'+item.assessmentIndex}`" :aria-controls="item.assessmentIndex">
-	                  <span
-	                    class="w-100 d-flex flex-column flex-md-row justify-content-start justify-content-md-between align-items-start align-items-md-center acc-item-header">
-	                    <span class="dt-details my-1 text-truncate">
-	                      <i class="bi bi-calendar fs-xs text-secondary me-2"></i>
-	                      {{item.dateAndTime}}
-	                    </span>
-	                    <span class="result-details my-1 pe-2">
-	                      <i class="bi bi-file-bar-graph fs-xs text-secondary me-2 d-inline-flex d-md-none"></i>
-	                      <span :class="`fst-italic fw-bold ${item.textColor}`">
-	                        {{item.depressionStatus + ' Depression'}}
-	                      </span>
-	                    </span>
-	                  </span>
-	                </button>
-	              </h2>
-	              <div :id="item.assessmentIndex" :class="`accordion-collapse collapse ${index === 0 ? '  ' : '  '}`"
-	                :aria-labelledby="`heading_${item.assessmentIndex}`">
-	                <div class="accordion-body">
-	                  <div v-for="(q, i) in qa" class="text-start row g-2 p-1 my-1 bg-gradient bg-light question-row">
-	                    <div class="m-0 p-1 col-12 col-md-8 col-lg-9 ps-3">
-	                      <b class="d-block ">
-	                        Question:
-	                      </b>
-	                      {{q.question}}
-	                    </div>
-	
-	                    <div class="m-0 p-1 col-12 col-md-4 col-lg-3 ps-3">
-	
-	                      <b class="d-block">
-	                        Answer:
-	                      </b>
-	                      <span class="fst-italic">
-	                        {{
-	                        q.options.filter(o => o.optionName === item.answers[q.index])[0].optionLabel
-	                        }}
-	                      </span>
-	                    </div>
-	                  </div>
-	                </div>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
+        <button type="button" class="btn btn-dark" @click="startAssessment()">
+          {{proceedBtnLabel}}
+        </button>
       </div>
-      
-      
-
-      
       <div v-if="showQuestionSection" class="container p-3">
         <!--         <span class="answer-count">
           {{numOfAnsweredQuestions + '/' + qa.length}}
@@ -119,9 +42,9 @@
             </p>
             <div class="options-container my-2">
               <div class="row">
-                <div v-for="(opt, index) in currentQuestion.options" class="col-12 col-md-12 px-1">
+                <div v-for="(opt, index) in currentQuestion.options" class="col-12 col-md-6 px-1">
                   <button
-                    :class="[(opt.optionName === currentQuestion.answer) ? 'selected' : '', 'btn btn-sm w-100 my-1 option-box text-start']"
+                    :class="[(opt.optionName === currentQuestion.answer) ? 'selected' : '', 'btn btn-sm w-100 my-1 option-box text-center']"
                     @click="selectOption(opt.optionName)">
                     {{opt.optionLabel}}
                   </button>
@@ -168,7 +91,7 @@
       <div v-if="showThankYouPage"
         class="py-3 test-completed-showcase d-flex flex-column justify-content-center align-items-center">
         <div class="results-header-container p-2 d-flex justify-content-between align-items-center">
-          <img src="../images/mental-health-symbol.png" alt="mental-health-symbol" class="w-25 img-fluid d-none d-md-block"
+          <img src="/images/self_assessment_screen.jpeg" alt="mental-health-symbol" class="w-25 img-fluid d-none d-md-block"
             style="width: 30% !important;">
           <div class="results-text ps-md-4 pt-md-4">
             <h3 class="results-header m-0 text-center text-md-start">
@@ -203,7 +126,7 @@
               </button>
             </div>
             <div class="col-12 col-sm-4 px-2 my-2">
-              <a type="button" class="w-100 btn btn-sm btn-dark" href="window.location.reload()">
+              <a type="button" class="w-100 btn btn-sm btn-dark" th:href="@{/self_assessment(id=${pid})}">
                 Start Again
                 <i class="bi bi-arrow-clockwise text-white"></i>
               </a>
@@ -222,7 +145,7 @@
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
   <script src="js/self_assessment.js"></script>
-</body>
+<</body>
 </html>
 <!--                 <input type="radio" :id="`qId${currentQuestion.index}${opt.optionName}`"
                     :name="`qId${currentQuestion.index}_${opt.optionName}`" :value="`${opt.optionName}`"
