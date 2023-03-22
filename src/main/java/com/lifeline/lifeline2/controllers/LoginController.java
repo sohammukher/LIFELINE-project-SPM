@@ -40,8 +40,11 @@ public class LoginController {
 		Base64.Decoder simpleDecoder = Base64.getDecoder();
 		String decodedString = new String(simpleDecoder.decode(ln.getPassword().getBytes()));
 		System.out.println("Decoded string : "+pwd+"  -  "+decodedString);
-		if(!type.equals("") && decodedString.equals(login.getPassword())) {
-			model.addAttribute("status", "success");
+		
+	   if(!type.equals("")) {
+	   if(decodedString.equals(login.getPassword())) {
+		   if(ln.getApproved().equalsIgnoreCase("Y")) {
+		model.addAttribute("status", "success");
 		if(type.equals("P"))
 			return "redirect:/patient/" + ln.getUid();
 		else if(type.equals("D"))
@@ -50,10 +53,20 @@ public class LoginController {
 			return "redirect:/counsellor/" + ln.getUid();
 		else if(type.equals("M"))
 			return "redirect:/manager/" + ln.getUid();
-		
+		   }
+			else {
+				model.addAttribute("status", "failed");
+				model.addAttribute("message", "Not yet authorised by the manager!");
+			}
 		}
 		else {
 			model.addAttribute("status", "failed");
+			model.addAttribute("message", "Invalid password");
+		}
+		}
+		else {
+			model.addAttribute("status", "failed");
+			model.addAttribute("message", "Invalid username");
 		}
 		
 		return "user_login";
