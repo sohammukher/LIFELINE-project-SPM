@@ -79,10 +79,10 @@ public class DoctorController {
 
 		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
 
-		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
-		String user = "sql9600624";
-		String password = "MUQNntyZ4Y";
-		String query = "SELECT patient.first_name, patient.last_name, patient.email,\n" +
+		String url = "jdbc:mysql://localhost:3306/spmdb";
+		String user = "root";
+		String password = "root123";
+		String query = "SELECT patient.first_name, patient.last_name,patient.needTreatment, patient.email,\n" +
 				"self_assessment.question1, self_assessment.question2,self_assessment.question3,self_assessment.question4,self_assessment.question5,self_assessment.question6,self_assessment.question7,self_assessment.question8,self_assessment.question9,\n" +
 				"self_assessment.self_assessment_score\n" +
 				"FROM patient\n" +
@@ -165,10 +165,9 @@ public class DoctorController {
 		System.out.println("Inside getAllDoctors");
 
 		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
-
-		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
-		String user = "sql9600624";
-		String password = "MUQNntyZ4Y";
+		String url = "jdbc:mysql://localhost:3306/spmdb";
+		String user = "root";
+		String password = "root123";
 		String query = "SELECT doctor_id, first_name, last_name, email\n" +
 				"\t\tFROM doctor;";
 
@@ -245,9 +244,9 @@ public ResponseEntity<JSONArray> getFutureAppointments(@PathVariable String doct
 
 	Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
 
-	String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
-	String user = "sql9600624";
-	String password = "MUQNntyZ4Y";
+	String url = "jdbc:mysql://localhost:3306/spmdb";
+	String user = "root";
+	String password = "root123";
 	String query = "select patient.email, patient.first_name, patient.last_name, self_assessment.self_assessment_score, self_assessment.appointment_status from patient JOIN self_assessment ON \n" +
 			"patient.self_assessment_id = self_assessment.self_assessment_id where patient.doctor_app_id = (\n" +
 			"select doctor_id from doctor where email = '"+doctor_email+"') and patient.doctor_app_id IN (select doctor_id from appointment where appointment_time  >= CURDATE());";
@@ -326,9 +325,9 @@ public ResponseEntity<JSONArray> getFutureAppointments(@PathVariable String doct
 
 		Class.forName("com.mysql.jdbc.Driver"); //JDBC Driver
 
-		String url = "jdbc:mysql://sql9.freesqldatabase.com/sql9600624";
-		String user = "sql9600624";
-		String password = "MUQNntyZ4Y";
+		String url = "jdbc:mysql://localhost:3306/spmdb";
+		String user = "root";
+		String password = "root123";
 		String query = "select patient.email, patient.first_name, patient.last_name, self_assessment.self_assessment_score, self_assessment.appointment_status from patient JOIN self_assessment ON \n" +
 				"patient.self_assessment_id = self_assessment.self_assessment_id where patient.doctor_app_id = (\n" +
 				"select doctor_id from doctor where email = '"+doctor_email+"') and patient.doctor_app_id IN (select doctor_id from appointment where appointment_time  < CURDATE());";
